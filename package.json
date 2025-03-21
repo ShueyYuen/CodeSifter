@@ -1,5 +1,5 @@
 {
-    "name": "conditional-loader",
+    "name": "code-sifter",
     "version": "1.0.0",
     "description": "A conditional compilation plugin for webpack and rollup",
     "main": "index.js",

@@ -1,11 +1,11 @@
-# Conditional Loader
+# CodeSifter
 
 A plugin for webpack and rollup that provides conditional compilation based on comment directives.
 
 ## Installation
 
 ```bash
-npm install conditional-loader --save-dev
+npm install code-sifter --save-dev
 ```
 
 ## Features
@@ -55,7 +55,7 @@ module.exports = {
         test: /\.(js|ts|jsx|tsx|html|css)$/,
         use: [
           {
-            loader: 'conditional-loader',
+            loader: 'code-sifter',
             options: {
               conditions: {
                 IS_LINUX: false,
@@ -75,7 +75,7 @@ module.exports = {
 
 ```javascript
 // rollup.config.js
-import conditionalPlugin from 'conditional-loader/rollup-plugin';
+import conditionalPlugin from 'code-sifter/rollup-plugin';
 
 export default {
   // ...

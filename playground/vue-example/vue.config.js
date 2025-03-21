@@ -6,11 +6,11 @@ module.exports = {
     const isLinux = process.env.IS_LINUX === 'true';
     console.log('IS_LINUX:', isLinux);
     
-    // Add conditional-loader to process JS files
+    // Add code-sifter to process JS files
     config.module
       .rule('js')
-      .use('conditional-loader')
-      .loader(require.resolve('conditional-loader/webpack'))
+      .use('code-sifter')
+      .loader(require.resolve('code-sifter/webpack'))
       .options({
         conditions: {
           IS_LINUX: isLinux,
@@ -19,11 +19,11 @@ module.exports = {
       })
       .before('babel-loader');
     
-    // Add conditional-loader to process Vue files
+    // Add code-sifter to process Vue files
     config.module
       .rule('vue')
-      .use('conditional-loader')
-      .loader(require.resolve('conditional-loader/webpack'))
+      .use('code-sifter')
+      .loader(require.resolve('code-sifter/webpack'))
       .options({
         conditions: {
           IS_LINUX: isLinux,
@@ -32,11 +32,11 @@ module.exports = {
       })
       .before('vue-loader');
     
-    // Add conditional-loader to process HTML files (for templates)
+    // Add code-sifter to process HTML files (for templates)
     config.module
       .rule('html')
-      .use('conditional-loader')
-      .loader(require.resolve('conditional-loader/webpack'))
+      .use('code-sifter')
+      .loader(require.resolve('code-sifter/webpack'))
       .options({
         conditions: {
           IS_LINUX: isLinux,
@@ -45,14 +45,14 @@ module.exports = {
       })
       .before('html-loader');
     
-    // Add conditional-loader to process CSS files
+    // Add code-sifter to process CSS files
     ['css', 'postcss', 'scss', 'sass', 'less', 'stylus'].forEach(rule => {
       if (config.module.rules.get(rule)) {
         config.module
           .rule(rule)
           .oneOf('normal')
-          .use('conditional-loader')
-          .loader(require.resolve('conditional-loader/webpack'))
+          .use('code-sifter')
+          .loader(require.resolve('code-sifter/webpack'))
           .options({
             conditions: {
               IS_LINUX: isLinux,

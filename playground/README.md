@@ -1,10 +1,10 @@
 # Conditional Loader Playground
 
-This playground contains three example projects that demonstrate how to use the conditional-loader plugin with webpack, rollup, and Vue.js.
+This playground contains three example projects that demonstrate how to use the code-sifter plugin with webpack, rollup, and Vue.js.
 
 ## Webpack Example
 
-A simple example showing how to use conditional-loader with webpack.
+A simple example showing how to use code-sifter with webpack.
 
 ### Usage
 
@@ -25,7 +25,7 @@ After building, open `index.html` in your browser to see the result.
 
 ## Rollup Example
 
-A similar example showing how to use conditional-loader with rollup.
+A similar example showing how to use code-sifter with rollup.
 
 ### Usage
 
@@ -46,7 +46,7 @@ After building, open `index.html` in your browser to see the result.
 
 ## Vue Example
 
-A Vue.js application example showing how to use conditional-loader with Vue.
+A Vue.js application example showing how to use code-sifter with Vue.
 
 ### Usage
 

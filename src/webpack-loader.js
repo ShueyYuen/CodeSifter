@@ -6,7 +6,7 @@ const path = require('path');
  * @param {string} source - Source code
  * @returns {string} Processed code
  */
-function conditionalLoader(source) {
+function codeSifter(source) {
   const options = this.getOptions() || {};
   const conditions = options.conditions || {};
 
@@ -22,4 +22,4 @@ function conditionalLoader(source) {
   }
 }
 
-module.exports = conditionalLoader;
+module.exports = codeSifter;

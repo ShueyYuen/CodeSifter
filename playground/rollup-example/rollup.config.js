@@ -1,5 +1,5 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import conditionalPlugin from 'conditional-loader/rollup';
+import conditionalPlugin from 'code-sifter/rollup';
 
 export default {
   input: 'src/main.js',

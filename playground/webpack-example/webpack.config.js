@@ -13,7 +13,7 @@ module.exports = {
         test: /\.(js|html|css)$/,
         use: [
           {
-            loader: 'conditional-loader/webpack',
+            loader: 'code-sifter/webpack',
             options: {
               conditions: {
                 IS_LINUX: process.env.IS_LINUX === 'true',
