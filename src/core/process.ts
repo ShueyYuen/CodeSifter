@@ -33,6 +33,7 @@ function getRemovedSection(
 ): [number, number][] {
   const stack: EvaluatedDirective[] = [], removed: [number, number][] = [];
   for (const directive of directives) {
+    removed.push([directive.start, directive.end]);
     const directiveType = directive.type;
     if (directiveType[0] === 'i') {
       const evaluated = evaluateCondition(directive, conditions);
@@ -89,6 +90,7 @@ function processConditionalCode(
 
   // Find all conditional directives
   const directives = findAllDirectives(code, COMMENT_EXTRACT);
+  console.log('Directives:', directives);
   const removedSections = getRemovedSection(directives, conditions);
 
   const magicString = new MagicString(code, { filename });

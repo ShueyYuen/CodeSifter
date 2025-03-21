@@ -32,19 +32,6 @@ module.exports = {
       })
       .before('vue-loader');
     
-    // Add code-sifter to process HTML files (for templates)
-    config.module
-      .rule('html')
-      .use('code-sifter')
-      .loader(require.resolve('code-sifter/webpack'))
-      .options({
-        conditions: {
-          IS_LINUX: isLinux,
-          IS_PRODUCTION: process.env.NODE_ENV === 'production'
-        }
-      })
-      .before('html-loader');
-    
     // Add code-sifter to process CSS files
     ['css', 'postcss', 'scss', 'sass', 'less', 'stylus'].forEach(rule => {
       if (config.module.rules.get(rule)) {

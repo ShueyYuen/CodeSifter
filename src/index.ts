@@ -13,6 +13,3 @@ export {
   // Rollup plugin
   rollupPlugin
 };
-
-// Default export as webpack loader for compatibility
-export default webpackLoader;
