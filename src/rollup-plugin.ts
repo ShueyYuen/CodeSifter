@@ -1,12 +1,28 @@
-const { processConditionalCode } = require('./core');
-const path = require('path');
+import { processConditionalCode, ConditionsObject } from './core';
+import * as path from 'node:path';
+import * as fs from 'node:fs';
+
+interface PluginOptions {
+  conditions?: ConditionsObject;
+}
+
+interface PluginContext {
+  error: (message: string) => never;
+}
+
+interface RollupPlugin {
+  name: string;
+  options: (opts: any) => any;
+  load: (id: string) => string | null;
+  transform: (this: PluginContext, code: string, id: string) => { code: string; map: any } | null;
+}
 
 /**
  * Create a Rollup plugin for conditional compilation
- * @param {Object} options - Plugin options
- * @returns {Object} Rollup plugin
+ * @param options - Plugin options
+ * @returns Rollup plugin
  */
-function conditionalPlugin(options = {}) {
+function conditionalPlugin(options: PluginOptions = {}): RollupPlugin {
   const conditions = options.conditions || {};
   
   return {
@@ -22,7 +38,6 @@ function conditionalPlugin(options = {}) {
     load(id) {
       // Skip if the file doesn't exist or isn't readable
       try {
-        const fs = require('fs');
         if (!fs.existsSync(id) || !fs.statSync(id).isFile()) {
           return null;
         }
@@ -51,11 +66,12 @@ function conditionalPlugin(options = {}) {
           map: null // Consider adding source map support in the future
         };
       } catch (error) {
-        this.error(`Conditional compilation error in ${id}: ${error.message}`);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        this.error(`Conditional compilation error in ${id}: ${errorMessage}`);
         return null;
       }
     }
   };
 }
 
-module.exports = conditionalPlugin;
+export default conditionalPlugin;

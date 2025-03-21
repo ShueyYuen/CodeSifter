@@ -2,8 +2,15 @@
     "name": "code-sifter",
     "version": "1.0.0",
     "description": "A conditional compilation plugin for webpack and rollup",
-    "main": "index.js",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ShueyYuen/CodeSifter.git"
+    },
     "scripts": {
+        "build": "tsc",
+        "prepublishOnly": "npm run build",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [
@@ -18,12 +25,18 @@
     "license": "MIT",
     "exports": {
         "./rollup": {
-            "import": "./src/rollup-plugin.js",
-            "require": "./src/rollup-plugin.js"
+            "import": "./dist/rollup-plugin.js",
+            "require": "./dist/rollup-plugin.js",
+            "types": "./dist/rollup-plugin.d.ts"
         },
         "./webpack": {
-            "import": "./src/webpack-loader.js",
-            "require": "./src/webpack-loader.js"
+            "import": "./dist/webpack-loader.js",
+            "require": "./dist/webpack-loader.js",
+            "types": "./dist/webpack-loader.d.ts"
         }
+    },
+    "devDependencies": {
+        "@types/node": "22.13.10",
+        "typescript": "5.8.2"
     }
 }

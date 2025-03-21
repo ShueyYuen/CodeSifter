@@ -8,7 +8,7 @@
     "build:linux": "cross-env IS_LINUX=true webpack"
   },
   "devDependencies": {
-    "code-sifter": "workspace:*",
+    "code-sifter": "file:../..",
     "cross-env": "^7.0.3",
     "webpack": "^5.75.0",
     "webpack-cli": "^4.10.0"

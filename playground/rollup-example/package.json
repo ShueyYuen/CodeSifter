@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",
-    "code-sifter": "workspace:*",
+    "code-sifter": "file:../..",
     "cross-env": "^7.0.3",
     "rollup": "^2.79.1"
   }
