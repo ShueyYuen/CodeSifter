@@ -1,0 +1,29 @@
+{
+    "name": "conditional-loader",
+    "version": "1.0.0",
+    "description": "A conditional compilation plugin for webpack and rollup",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "webpack",
+        "rollup",
+        "loader",
+        "plugin",
+        "conditional",
+        "compilation"
+    ],
+    "author": "",
+    "license": "MIT",
+    "exports": {
+        "./rollup": {
+            "import": "./src/rollup-plugin.js",
+            "require": "./src/rollup-plugin.js"
+        },
+        "./webpack": {
+            "import": "./src/webpack-loader.js",
+            "require": "./src/webpack-loader.js"
+        }
+    }
+}
