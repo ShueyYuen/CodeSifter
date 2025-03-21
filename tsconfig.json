@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2018",
-    "module": "commonjs",
+    "target": "ES2024",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowImportingTsExtensions": false,
     "declaration": true,
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
+    "baseUrl": "src",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },

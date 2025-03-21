@@ -1,6 +1,6 @@
 import webpackLoader from './webpack-loader';
 import rollupPlugin from './rollup-plugin';
-import { processConditionalCode } from './core';
+import { processConditionalCode } from './core/process';
 
 // Export all utilities
 export {

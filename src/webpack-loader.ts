@@ -1,8 +1,7 @@
-import { processConditionalCode, ConditionsObject } from './core';
-import * as path from 'node:path';
+import { processConditionalCode, Conditions } from './core/process';
 
 interface LoaderOptions {
-  conditions?: ConditionsObject;
+  conditions?: Conditions;
 }
 
 interface LoaderContext {
@@ -24,7 +23,10 @@ function codeSifter(this: LoaderContext, source: string): string {
       // Vue files are processed differently
       console.log('\n', this.resourcePath, '\n*************\n', source, '\n-----------------\n', processConditionalCode(source, conditions), '\n~~~~~~~~~~~~~~~~~~~\n');
     }
-    return processConditionalCode(source, conditions, this.resourcePath.endsWith('.vue'));
+    return processConditionalCode(source, {
+      conditions,
+      filename: this.resourcePath,
+    }).code;
   } catch (error) {
     this.emitError(new Error(`Conditional compilation error in ${this.resourcePath}: ${error instanceof Error ? error.message : String(error)}`));
     return source;

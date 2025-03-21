@@ -14,6 +14,7 @@ npm install code-sifter --save-dev
 - Supports multiple file types (JavaScript, HTML, CSS)
 - Works with both webpack and rollup
 - Simple configuration
+- Smart whitespace cleanup to maintain code formatting
 
 ## Usage
 
@@ -100,8 +101,6 @@ The core function that processes code with conditional directives.
 
 - `code` (string): Source code to process
 - `conditions` (object): Condition flags, e.g. `{ IS_LINUX: false }`
-- `options` (object): Additional options
-  - `fileType`: Type of file ('js', 'html', 'css')
 
 ## License
 
