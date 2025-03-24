@@ -1,15 +1,19 @@
+import { dir } from 'console';
 import { evaluateExpression, type Conditions } from './evaluateExpression';
 import MagicString, { type SourceMap } from 'magic-string';
 
 export type { Conditions };
 
-const COMMENT_EXTRACT = /\s*(?:<!--|\{?\/\*)\s+#(if(?:n?def)?|else|endif)([\s\S]+?)(?:(?<=<!--.*)-->|(?<=\/\*.*)\*\/\}?)/g;
 
+const COMMENT_EXTRACT = /\s*(?:<!--|\{?\/\*)\s+#(if(?:n?def)?|else|endif)((?<=#if)[\s\S]+?|\s+)(?:(?<=<!--.*)-->|(?<=\/\*.*)\*\/\}?)/g;
+
+type DirectiveType = 'ifdef' | 'ifndef' | 'if' | 'else' | 'endif';
 interface DirectiveMatch {
   start: number;
   end: number;
-  type: string;
+  type: DirectiveType;
   condition: string | null;
+  next?: DirectiveMatch;
 }
 
 interface EvaluatedDirective extends DirectiveMatch {
@@ -27,24 +31,41 @@ interface ProcessOptions {
   sourcemap?: boolean;
 }
 
+function skipUntilNextDirective(directives: DirectiveMatch[], directive: DirectiveMatch): void {
+  const nextDirective = directive.next;
+  let currentDirective: DirectiveMatch | undefined;
+  while (currentDirective = directives.shift()) {
+    if (currentDirective === nextDirective) {
+      break;
+    }
+  }
+  directives.unshift(currentDirective!);
+}
+
+/**
+ * Get the removed sections of code based on directives and conditions
+ * @param directives - Array of directive matches
+ * @param conditions - Condition flags
+ * @returns Array of removed sections as [start, end] pairs
+ */
 function getRemovedSection(
   directives: DirectiveMatch[],
   conditions: Conditions
 ): [number, number][] {
   const stack: EvaluatedDirective[] = [], removed: [number, number][] = [];
-  for (const directive of directives) {
+
+  let directive: DirectiveMatch | undefined;
+  while (directive = directives.shift()) {
     removed.push([directive.start, directive.end]);
     const directiveType = directive.type;
     if (directiveType[0] === 'i') {
       const evaluated = evaluateCondition(directive, conditions);
       stack.push({ ...directive, evaluated });
+      !evaluated && skipUntilNextDirective(directives, directive);
     } else {
-      if (stack.length === 0) {
-        throw new Error(`Unexpected #${directiveType} without matching #if`);
-      }
-
       const evaluatedDirective = stack.pop()!;
-      if (!evaluatedDirective.evaluated) {
+      const evaluated = evaluatedDirective.evaluated;
+      if (!evaluated) {
         removed.pop();
         removed.pop();
         removed.push([evaluatedDirective.start, directive.end]);
@@ -53,14 +74,11 @@ function getRemovedSection(
       if (directiveType === 'else') {
         stack.push({
           ...directive,
-          evaluated: !evaluatedDirective.evaluated,
+          evaluated: !evaluated,
         });
+        evaluated && skipUntilNextDirective(directives, directive);
       }
     }
-  }
-
-  if (stack.length > 0) {
-    throw new Error('Unclosed conditional block(s)');
   }
 
   return removed;
@@ -89,8 +107,7 @@ function processConditionalCode(
     <Required<ProcessOptions>>Object.assign(structuredClone(DEFAULT_OPTIONS), options);
 
   // Find all conditional directives
-  const directives = findAllDirectives(code, COMMENT_EXTRACT);
-  console.log('Directives:', directives);
+  const directives = parseAllDirectives(code, COMMENT_EXTRACT);
   const removedSections = getRemovedSection(directives, conditions);
 
   const magicString = new MagicString(code, { filename });
@@ -104,22 +121,75 @@ function processConditionalCode(
 }
 
 /**
+ * Convert a character index to a line and column position in the source code
+ * @param code - Source code
+ * @param index - Character index
+ * @returns Position object containing line and column
+ */
+function convertIndexToPosition(code: string, index: number): { line: number; column: number } {
+  if (index <= 0) {
+    return { line: 0, column: 0 };
+  }
+  const lines = code.slice(0, index).split('\n');
+  return {
+    line: lines.length,
+    column: lines.at(-1)!.length,
+  };
+}
+
+
+const NEXT_DIRECTIVE_MAP = {
+  if: 'e',
+  ifdef: 'e',
+  ifndef: 'e',
+  else: 'en',
+} as Record<DirectiveType, string>;
+
+/**
  * Find all directive matches in the code
  * @param code - Source code
  * @param pattern - Regex patterns for directives
  * @returns Array of matches
  */
-function findAllDirectives(code: string, pattern: RegExp): DirectiveMatch[] {
+function parseAllDirectives(code: string, pattern: RegExp): DirectiveMatch[] {
   let match;
-  const matches: DirectiveMatch[] = [];
+  const matches: DirectiveMatch[] = [], stack: DirectiveMatch[] = [];
   pattern.lastIndex = 0;
   while ((match = pattern.exec(code)) !== null) {
     const [matched, type, condition] = match;
-    matches.push({
+    const directive = {
       start: match.index,
       end: match.index + matched.length,
       type,
       condition: condition.trim() || null,
+    } as DirectiveMatch;
+    // 'i' indicates if[[n]def], 'e' indicates else/endif, 'en' indicates endif
+    if (type.startsWith('i')) {
+      stack.push(directive);
+    } else {
+      const preDirective = stack.pop();
+      if (!preDirective) {
+        throw new Error(`Unexpected #${type} without matching #if`, {
+          cause: convertIndexToPosition(code, match.index),
+        });
+      }
+      const prediction = NEXT_DIRECTIVE_MAP[preDirective.type];
+      if (type.startsWith(prediction)) {
+        preDirective.next = directive;
+        type === 'else' && stack.push(directive);
+      } else {
+        throw new Error(`Unexpected #${type} after #${preDirective.type}`, {
+          cause: convertIndexToPosition(code, match.index),
+        });
+      }
+    }
+    matches.push(directive);
+  }
+
+  if (stack.length) {
+    const directive = stack.pop()!;
+    throw new Error(`Unclosed conditional block(s)`, {
+      cause: convertIndexToPosition(code, directive.start),
     });
   }
   return matches;
