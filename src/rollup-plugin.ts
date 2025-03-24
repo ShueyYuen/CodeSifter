@@ -1,5 +1,4 @@
-import { processConditionalCode, Conditions } from './core/process';
-
+import { processCode, Conditions } from './core/process';
 import type { Plugin } from 'rollup';
 
 interface PluginOptions {
@@ -9,25 +8,25 @@ interface PluginOptions {
 
 /**
  * Create a Rollup plugin for conditional compilation
- * @param options - Plugin options
- * @returns Rollup plugin
+ * @param options - Plugin options including conditions and sourcemap settings
+ * @returns Configured Rollup plugin
  */
-function conditionalCompilationPlugin(options: PluginOptions = {}): Plugin {
-  const innerOptions = structuredClone(options);
+function conditionalPlugin(options: PluginOptions = {}): Plugin {
+  const pluginOptions = structuredClone(options);
   
   return {
-    name: 'rollup-plugin-code-sifter',
-
-    // Keep transform as fallback but with higher priority
+    name: 'rollup-plugin-conditional',
+    
     transform(code, id) {
       try {
-        const result = processConditionalCode(code, {
-          ...innerOptions,
+        const result = processCode(code, {
+          ...pluginOptions,
           filename: id,
         });
+        
         return {
           code: result.code,
-          map: result.sourceMap // Consider adding source map support in the future
+          map: result.sourceMap
         };
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -37,4 +36,4 @@ function conditionalCompilationPlugin(options: PluginOptions = {}): Plugin {
   };
 }
 
-export default conditionalCompilationPlugin;
+export default conditionalPlugin;

@@ -9,16 +9,16 @@ export interface Conditions {
  * @returns The evaluation result
  */
 export function evaluateExpression(expression: string, conditions: Conditions): boolean {
-  let pos = 0;
+  let position = 0;
 
   // Parse OR expressions (lowest precedence)
   function parseOr(): boolean {
     let left = parseAnd();
-    while (pos < expression.length) {
+    while (position < expression.length) {
       skipWhitespace();
 
-      if (pos + 1 < expression.length && expression.substring(pos, pos + 2) === '||') {
-        pos += 2; // Skip '||'
+      if (position + 1 < expression.length && expression.substring(position, position + 2) === '||') {
+        position += 2; // Skip '||'
         const right = parseAnd();
         left = left || right;
       } else {
@@ -31,11 +31,11 @@ export function evaluateExpression(expression: string, conditions: Conditions): 
   // Parse AND expressions (medium precedence)
   function parseAnd(): boolean {
     let left = parseNot();
-    while (pos < expression.length) {
+    while (position < expression.length) {
       skipWhitespace();
 
-      if (pos + 1 < expression.length && expression.substring(pos, pos + 2) === '&&') {
-        pos += 2; // Skip '&&'
+      if (position + 1 < expression.length && expression.substring(position, position + 2) === '&&') {
+        position += 2; // Skip '&&'
         const right = parseNot();
         left = left && right;
       } else {
@@ -49,8 +49,8 @@ export function evaluateExpression(expression: string, conditions: Conditions): 
   function parseNot(): boolean {
     skipWhitespace();
 
-    if (pos < expression.length && expression[pos] === '!') {
-      pos++; // Skip '!'
+    if (position < expression.length && expression[position] === '!') {
+      position++; // Skip '!'
       return !parseAtom();
     }
 
@@ -61,53 +61,57 @@ export function evaluateExpression(expression: string, conditions: Conditions): 
   function parseAtom(): boolean {
     skipWhitespace();
 
-    if (pos >= expression.length) {
-      throw new Error('Unexpected end of expression');
+    if (position >= expression.length) {
+      throw new SyntaxError('Unexpected end of expression', { cause: position });
     }
 
     // Handle parenthesized expressions
-    if (expression[pos] === '(') {
-      pos++; // Skip '('
+    if (expression[position] === '(') {
+      position++; // Skip '('
       const result = parseOr();
 
       skipWhitespace();
 
-      if (pos >= expression.length || expression[pos] !== ')') {
-        throw new Error('Missing closing parenthesis');
+      if (position >= expression.length || expression[position] !== ')') {
+        throw new SyntaxError('Missing closing parenthesis', { cause: position });
       }
 
-      pos++; // Skip ')'
+      position++; // Skip ')'
       return result;
     }
 
     // Handle identifiers (condition names)
-    const start = pos;
-    while (pos < expression.length &&
-      (isAlphaNumericUnderdash(expression[pos]))) {
-      pos++;
+    const startPosition = position;
+    while (position < expression.length &&
+      (isIdentifierChar(expression[position]))) {
+      position++;
     }
 
-    const identifier = expression.substring(start, pos);
+    const identifier = expression.substring(startPosition, position);
     if (identifier.length === 0) {
-      throw new Error(`Unexpected character at position ${pos}: ${expression[pos]}`);
+      throw new SyntaxError(`Unexpected character at position ${position}: ${expression[position]}`, {
+        cause: position
+      });
     }
 
     return !!conditions[identifier];
   }
 
   function skipWhitespace(): void {
-    while (pos < expression.length && /\s/.test(expression[pos])) {
-      pos++;
+    while (position < expression.length && /\s/.test(expression[position])) {
+      position++;
     }
   }
 
-  function isAlphaNumericUnderdash(char: string): boolean {
-    return /[A-Z0-9_]/.test(char);
+  function isIdentifierChar(char: string): boolean {
+    return /[A-Za-z0-9_]/.test(char);
   }
 
   const result = parseOr();
-  if (pos < expression.length) {
-    throw new Error(`Unexpected character at position ${pos}: ${expression[pos]}`);
+  if (position < expression.length) {
+    throw new SyntaxError(`Unexpected character at position ${position}: ${expression[position]}`, {
+      cause: position
+    });
   }
   return result;
 }

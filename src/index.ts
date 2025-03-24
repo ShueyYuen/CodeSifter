@@ -1,11 +1,13 @@
 import webpackLoader from './webpack-loader';
 import rollupPlugin from './rollup-plugin';
-import { processConditionalCode } from './core/process';
+import { processCode } from './core/process';
 
-// Export all utilities
+/**
+ * Export all utilities for conditional code processing
+ */
 export {
-  // Core function
-  processConditionalCode,
+  // Core processing function
+  processCode,
   
   // Webpack loader
   webpackLoader,

@@ -1,4 +1,4 @@
-import { processConditionalCode, Conditions } from './core/process';
+import { processCode, Conditions } from './core/process';
 import { type LoaderDefinitionFunction } from 'webpack';
 
 interface LoaderOptions {
@@ -7,19 +7,16 @@ interface LoaderOptions {
 
 /**
  * Webpack loader for conditional compilation
- * @param source - Source code
- * @returns Processed code
+ * @param source - Source code to process
+ * @returns Processed code with conditionals evaluated
  */
-const codeSifter: LoaderDefinitionFunction<LoaderOptions> = function (source: string) {
+const conditionalLoader: LoaderDefinitionFunction<LoaderOptions> = function (source: string) {
   const options = this.getOptions() || {};
   const conditions = options.conditions || {};
   this.async();
+  
   try {
-    // if (this.resourcePath.endsWith('.vue')) {
-    //   // Vue files are processed differently
-    //   console.log('\n', this.resourcePath, '\n*************\n', source, '\n-----------------\n', processConditionalCode(source, conditions), '\n~~~~~~~~~~~~~~~~~~~\n');
-    // }
-    const { code, sourceMap } = processConditionalCode(source, {
+    const { code, sourceMap } = processCode(source, {
       conditions,
       filename: this.resourcePath,
     });
@@ -30,4 +27,4 @@ const codeSifter: LoaderDefinitionFunction<LoaderOptions> = function (source: st
   }
 };
 
-export default codeSifter;
+export default conditionalLoader;
