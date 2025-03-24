@@ -4,7 +4,7 @@ import MagicString, { type SourceMap } from 'magic-string';
 export type { Conditions };
 
 
-const DIRECTIVE_PATTERN = /\s*(?:<!--|\{?\/\*)\s+#(if(?:n?def)?|else|endif)((?<=#if)[\s\S]+?|\s+)(?:(?<=<!--.*)-->|(?<=\/\*.*)\*\/\}?)/g;
+const DIRECTIVE_PATTERN = /\s*(?:<!--|\{?\/\*)\s+#(if(?:n?def)?|else|endif)((?<=#i\S*)[\s\S]+?|\s+)(?:(?<=<!--.*)-->|(?<=\/\*.*)\*\/\}?)/g;
 
 type DirectiveType = 'ifdef' | 'ifndef' | 'if' | 'else' | 'endif';
 interface Directive {
@@ -170,6 +170,10 @@ function parseDirectives(code: string, pattern: RegExp): Directive[] {
   pattern.lastIndex = 0;
 
   while ((match = pattern.exec(code)) !== null) {
+    if (match.index === pattern.lastIndex) {
+      pattern.lastIndex++;
+      continue;
+    }
     const [matched, type, condition] = match;
     const directive = {
       start: match.index,
@@ -178,7 +182,7 @@ function parseDirectives(code: string, pattern: RegExp): Directive[] {
       condition: condition.trim() || null,
     } as Directive;
 
-    // 'i' indicates if[[n]def], 'e' indicates else/endif, 'en' indicates endif
+    // 'i' indicates if[[n]def]
     if (type.startsWith('i')) {
       stack.push(directive);
     } else {
