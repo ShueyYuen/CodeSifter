@@ -38,11 +38,11 @@
         }
     },
     "devDependencies": {
-        "@types/node": "22.13.10",
+        "@types/node": "22.13.11",
         "@types/webpack": "5.28.5",
-        "rollup": "4.36.0",
-        "webpack": "5.98.2",
-        "typescript": "5.8.2"
+        "rollup": "4.37.0",
+        "typescript": "5.8.2",
+        "webpack": "5.98.0"
     },
     "dependencies": {
         "magic-string": "0.30.17"
