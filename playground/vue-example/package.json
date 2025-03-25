@@ -14,7 +14,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "code-sifter": "file:../../",
+    "code-sifter": "workspace:*",
     "cross-env": "^7.0.3"
   }
 }

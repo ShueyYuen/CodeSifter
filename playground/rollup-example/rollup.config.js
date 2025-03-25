@@ -1,5 +1,5 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import conditionalPlugin from 'code-sifter/rollup';
+import ConditionalCode from 'code-sifter/rollup';
 
 export default {
   input: 'src/main.js',
@@ -9,7 +9,7 @@ export default {
     sourcemap: true,
   },
   plugins: [
-    conditionalPlugin({
+    ConditionalCode({
       conditions: {
         IS_LINUX: process.env.IS_LINUX === 'true',
         IS_PRODUCTION: false

@@ -30,6 +30,8 @@ interface ProcessOptions {
   sourcemap?: boolean;
 }
 
+const isElseDirective = /* #__PURE__ */ (type: DirectiveType) => type === 'else';
+
 /**
  * Skip to the next paired directive in the sequence
  * @param directives - Array of remaining directives to process
@@ -38,6 +40,7 @@ interface ProcessOptions {
 function skipToMatchingDirective(directives: Directive[], currentDirective: Directive): void {
   const nextDirective = currentDirective.next;
   let directive: Directive | undefined;
+  // eslint-disable-next-line no-cond-assign
   while (directive = directives.shift()) {
     if (directive === nextDirective) {
       break;
@@ -76,18 +79,23 @@ function getRemovedSections(
   const stack: EvaluatedDirective[] = [], removed: [number, number][] = [];
 
   let directive: Directive | undefined;
+  // eslint-disable-next-line no-cond-assign
   while (directive = directives.shift()) {
-    removed.push([directive.start, directive.end]);
-    const directiveType = directive.type;
-    if (directiveType[0] === 'i') {
+    const { start, end, type: directiveType } = directive;
+    removed.push([start, end]);
+    if (directive.condition) {
       try {
         const evaluated = evaluateDirectiveCondition(directive, conditions);
         stack.push({ ...directive, evaluated });
-        !evaluated && skipToMatchingDirective(directives, directive);
-      } catch (error) {
-        throw new SyntaxError(`Error evaluating directive condition`, {
-          cause: directive.start + (<any>error).cause,
-        });``
+        if (!evaluated) {
+          skipToMatchingDirective(directives, directive);
+        }
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new SyntaxError(`Error evaluating directive condition`, {
+            cause: start + <number>error.cause,
+          });
+        }
       }
     } else {
       const evaluatedDirective = stack.pop()!;
@@ -95,15 +103,17 @@ function getRemovedSections(
       if (!evaluated) {
         removed.pop();
         removed.pop();
-        removed.push([evaluatedDirective.start, directive.end]);
+        removed.push([evaluatedDirective.start, end]);
       }
 
-      if (directiveType === 'else') {
+      if (isElseDirective(directiveType)) {
         stack.push({
           ...directive,
           evaluated: !evaluated,
         });
-        evaluated && skipToMatchingDirective(directives, directive);
+        if (evaluated) {
+          skipToMatchingDirective(directives, directive);
+        }
       }
     }
   }
@@ -113,6 +123,7 @@ function getRemovedSections(
 
 const DEFAULT_OPTIONS: ProcessOptions = {
   conditions: {},
+  sourcemap: true,
   filename: 'unknown',
 };
 
@@ -124,26 +135,37 @@ const DEFAULT_OPTIONS: ProcessOptions = {
  */
 function processCode(
   code: string,
-  options: {
-    conditions?: Conditions,
-    filename?: string;
-  } = DEFAULT_OPTIONS
+  options: ProcessOptions = DEFAULT_OPTIONS
 ): ProcessResult {
-  const { conditions, filename } =
+  const { conditions, filename, sourcemap } =
     <Required<ProcessOptions>>Object.assign(structuredClone(DEFAULT_OPTIONS), options);
 
   // Find all conditional directives
   const directives = parseDirectives(code, DIRECTIVE_PATTERN);
   const removedSections = getRemovedSections(directives, conditions);
 
-  const magicString = new MagicString(code, { filename });
-  for (const [start, end] of removedSections) {
-    magicString.remove(start, end);
+  if (!removedSections.length) {
+    return { code };
   }
-  return {
-    code: magicString.toString(),
-    sourceMap: magicString.generateMap({ includeContent: true }),
-  };
+
+  if (sourcemap) {
+    const magicString = new MagicString(code, { filename });
+    for (const [start, end] of removedSections) {
+      magicString.remove(start, end);
+    }
+    return {
+      code: magicString.toString(),
+      sourceMap: magicString.generateMap({ includeContent: true }),
+    };
+  }
+
+  let result = '', lastPos = 0;
+  for (const [start, end] of removedSections) {
+    result += code.slice(lastPos, start);
+    lastPos = end;
+  }
+  result += code.slice(lastPos);
+  return { code: result };
 }
 
 /**
@@ -196,7 +218,9 @@ function parseDirectives(code: string, pattern: RegExp): Directive[] {
       const expectedType = DIRECTIVE_SEQUENCE_MAP[parentDirective.type];
       if (type.startsWith(expectedType)) {
         parentDirective.next = directive;
-        type === 'else' && stack.push(directive);
+        if (isElseDirective(<DirectiveType>type)) {
+          stack.push(directive);
+        }
       } else {
         throw new Error(`Unexpected #${type} after #${parentDirective.type}`, {
           cause: getPositionInfo(code, match.index),
@@ -237,6 +261,6 @@ function evaluateDirectiveCondition(directive: Directive, conditions: Conditions
 
 export {
   processCode,
-  Directive,
-  ProcessResult
+  type Directive,
+  type ProcessResult
 };

@@ -1,4 +1,4 @@
-/* #if IS_LINUX || !IS_PRODUCTION */
+/* #if !IS_LINUX */
 import { createServer } from './create-linux-server';
 /* #if IS_PRODUCTION */
 console.log('Using Linux server (Rollup build)');

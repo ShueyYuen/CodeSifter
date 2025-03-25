@@ -1,50 +1,41 @@
 {
-    "name": "code-sifter",
-    "version": "1.0.0",
-    "description": "A conditional compilation plugin for webpack and rollup",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/ShueyYuen/CodeSifter.git"
-    },
-    "scripts": {
-        "build": "tsc",
-        "prepublishOnly": "npm run build",
-        "play:rollup": "tsc && cd ./playground/rollup-example && npm run build:watch",
-        "play:webpack": "tsc && cd ./playground/webpack-example && npm run build:watch",
-        "play:vue": "tsc && cd ./playground/vue-example && npm run build"
-    },
-    "keywords": [
-        "webpack",
-        "rollup-plugin",
-        "loader",
-        "plugin",
-        "conditional",
-        "compilation"
-    ],
-    "author": "",
-    "license": "MIT",
-    "exports": {
-        "./rollup": {
-            "import": "./dist/rollup-plugin.js",
-            "require": "./dist/rollup-plugin.js",
-            "types": "./dist/rollup-plugin.d.ts"
-        },
-        "./webpack": {
-            "import": "./dist/webpack-loader.js",
-            "require": "./dist/webpack-loader.js",
-            "types": "./dist/webpack-loader.d.ts"
-        }
-    },
-    "devDependencies": {
-        "@types/node": "22.13.11",
-        "@types/webpack": "5.28.5",
-        "rollup": "4.37.0",
-        "typescript": "5.8.2",
-        "webpack": "5.98.0"
-    },
-    "dependencies": {
-        "magic-string": "0.30.17"
-    }
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShueyYuen/CodeSifter.git"
+  },
+  "scripts": {
+    "lint": "eslint --cache .",
+    "build": "pnpm -r build"
+  },
+  "keywords": [
+    "vite",
+    "webpack",
+    "rspack",
+    "rollup",
+    "rolldown",
+    "esbuild",
+    "farm",
+    "loader",
+    "plugin",
+    "conditional",
+    "compilation"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.23.0",
+    "@types/node": "22.13.11",
+    "eslint": "9.23.0",
+    "eslint-config-standard": "17.1.0",
+    "globals": "^16.0.0",
+    "prettier": "3.5.3",
+    "typescript-eslint": "^8.28.0"
+
+  },
+  "engines": {
+    "node": ">=18.12.0"
+  },
+  "packageManager": "pnpm@10.6.5",
+  "dependencies": {
+  }
 }

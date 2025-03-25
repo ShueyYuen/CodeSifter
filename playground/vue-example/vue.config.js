@@ -5,7 +5,7 @@ module.exports = {
     // Get the IS_LINUX environment variable to use in loader configuration
     const isLinux = process.env.IS_LINUX === 'true';
     console.log('IS_LINUX:', isLinux);
-    
+
     // Add code-sifter to process JS files
     config.module
       .rule('js')
@@ -18,7 +18,7 @@ module.exports = {
         }
       })
       .before('babel-loader');
-    
+
     // Add code-sifter to process Vue files
     config.module
       .rule('vue')
@@ -31,7 +31,7 @@ module.exports = {
         }
       })
       .before('vue-loader');
-    
+
     // Add code-sifter to process CSS files
     ['css', 'postcss', 'scss', 'sass', 'less', 'stylus'].forEach(rule => {
       if (config.module.rules.get(rule)) {
@@ -50,7 +50,7 @@ module.exports = {
       }
     });
   },
-  
+
   // Optional: Configure other Vue CLI settings
   configureWebpack: {
     resolve: {
@@ -59,11 +59,11 @@ module.exports = {
       }
     }
   },
-  
+
   // Optional: Modify output directory and public path if needed
   // outputDir: 'dist',
   // publicPath: '/',
-  
+
   // Optional: Enable source maps in production
   productionSourceMap: true,
 };

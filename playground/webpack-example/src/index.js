@@ -6,7 +6,7 @@ import { createServer } from './create-server';
 console.log('Using default server');
 /* #endif */
 
-const a = createServer({ 
+const a = createServer({
   delay: /* #if IS_LINUX */ 600, /* #else */ 100, /* #endif */
   /* #if IS_PRODUCTION */
   production: true,
