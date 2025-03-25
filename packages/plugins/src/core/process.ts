@@ -1,5 +1,6 @@
-import { evaluateExpression, type Conditions } from './evaluateExpression';
 import MagicString, { type SourceMap } from 'magic-string';
+
+import { evaluateExpression, type Conditions } from './evaluateExpression.js';
 
 export type { Conditions };
 

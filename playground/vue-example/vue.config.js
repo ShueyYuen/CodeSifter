@@ -10,7 +10,7 @@ module.exports = {
     config.module
       .rule('js')
       .use('code-sifter')
-      .loader(require.resolve('code-sifter/webpack'))
+      .loader(require.resolve('code-sifter'))
       .options({
         conditions: {
           IS_LINUX: isLinux,
@@ -23,7 +23,7 @@ module.exports = {
     config.module
       .rule('vue')
       .use('code-sifter')
-      .loader(require.resolve('code-sifter/webpack'))
+      .loader(require.resolve('code-sifter'))
       .options({
         conditions: {
           IS_LINUX: isLinux,
@@ -39,7 +39,7 @@ module.exports = {
           .rule(rule)
           .oneOf('normal')
           .use('code-sifter')
-          .loader(require.resolve('code-sifter/webpack'))
+          .loader(require.resolve('code-sifter'))
           .options({
             conditions: {
               IS_LINUX: isLinux,

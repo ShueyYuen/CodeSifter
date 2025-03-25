@@ -1,28 +1,29 @@
-import { createUnplugin, type UnpluginInstance, type UnpluginOptions } from 'unplugin';
-import { createFilter } from 'unplugin-utils'
+import { processCode, Conditions } from './core/process.js';
+import type { LoaderDefinitionFunction } from 'webpack';
 
-import { processCode } from './core/process';
-import { resolveOptions, type Options } from './core/options';
+interface LoaderOptions {
+  conditions?: Conditions;
+}
 
-export const ConditionalCode: UnpluginInstance<Options> = createUnplugin((rawOptions = {}): UnpluginOptions => {
-  const options = resolveOptions(rawOptions);
-  const filter = createFilter(options.include, options.exclude);
-
-  const processOptions = {
-    conditions: options.conditions,
+/**
+ * Webpack loader for conditional compilation
+ * @param source - Source code
+ * @returns Processed code
+ */
+const codeSifter: LoaderDefinitionFunction<LoaderOptions> = function (source: string) {
+  const options = this.getOptions() || {};
+  const conditions = options.conditions || {};
+  this.async();
+  try {
+    const { code, sourceMap } = processCode(source, {
+      conditions,
+      filename: this.resourcePath,
+    });
+    this.callback(null, code, sourceMap);
+  } catch (error) {
+    this.emitError(new Error(`Conditional compilation error in ${this.resourcePath}: ${error instanceof Error ? error.message : String(error)}`));
+    return source;
   }
+};
 
-  const name = 'conditional-code';
-  return {
-    name,
-    enforce: 'pre',
-
-    transformInclude(id) {
-      return filter(id);
-    },
-
-    transform(code) {
-      return processCode(code, processOptions);
-    }
-  };
-});
+export default codeSifter;

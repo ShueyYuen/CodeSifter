@@ -1,6 +1,6 @@
 import type { FilterPattern } from 'unplugin-utils'
 
-import type { Conditions } from './process';
+import type { Conditions } from './process.js';
 
 export interface Options {
   include?: FilterPattern;

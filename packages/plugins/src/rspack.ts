@@ -1,4 +1,4 @@
-import { ConditionalCode } from ".";
+import { ConditionalCode } from "./factory.js";
 
 /**
  * Rspack plugin
