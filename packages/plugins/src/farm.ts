@@ -1,3 +1,9 @@
+/**
+ * This entry file is for Farm plugin.
+ *
+ * @module
+ */
+
 import { ConditionalCode } from "./factory.js";
 
 /**

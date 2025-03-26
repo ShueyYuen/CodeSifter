@@ -1,4 +1,5 @@
 import { processCode, Conditions } from './core/process.js';
+
 import type { LoaderDefinitionFunction } from 'webpack';
 
 interface LoaderOptions {
