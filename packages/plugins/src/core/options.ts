@@ -8,7 +8,10 @@ export interface Options {
   conditions?: Conditions;
 }
 
-export type ResolvedOptions = Required<Pick<Options, 'conditions' | 'exclude' | 'include'>> & Options;
+type MustRequired<T> = {
+  [K in keyof T]-?: NonNullable<T[K]>;
+}
+export type ResolvedOptions = MustRequired<Options>;
 
 const UPPER_CASE = /^[A-Z_]+$/;
 
@@ -21,7 +24,7 @@ export function resolveOptions(options: Options): ResolvedOptions {
     }
   }
   return {
-    include: options.include || [/\.[cm]?[jt]sx?$/, /\.(?:le|(?:post)?c|sa)ss$/, /\.(?:vue|stylus|postcss)$/],
+    include: options.include || [/\.[cm]?[jt]sx?$/, /\.(le|(s|p(ost)?)?c|sa)ss$/, /\.(vue|styl(us)?|postcss|pug|html)$/],
     exclude: options.exclude || [/node_modules/, /\.git/, /\.nuxt/],
     conditions: options.conditions || {},
   };

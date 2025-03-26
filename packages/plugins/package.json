@@ -36,7 +36,9 @@
     "./rolldown": "./dist/rolldown.js",
     "./esbuild": "./dist/esbuild.js",
     "./farm": "./dist/farm.js",
+    "./vue-cli": "./dist/vueCli.js",
     "./core": "./dist/core/index.js",
+    "./loader": "./dist/loader.js",
     "./*": "./*"
   },
   "devDependencies": {

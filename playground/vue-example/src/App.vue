@@ -13,12 +13,23 @@
 </template>
 
 <script>
-// import ServerInfo from './components/ServerInfo.vue'
+import ServerInfo from './components/ServerInfo.vue'
 
 export default {
   name: 'App',
   components: {
     ServerInfo
+  },
+  data() {
+    return {
+      serverInfo: /* #if IS_LINUX */ 'Linux Server' /* #else */ 'Windows Server' /* #endif */,
+    }
+  },
+  mounted() {
+    /* #if IS_LINUX */
+    console.error('Linux mode')
+    /* #endif */
+    console.log('App mounted')
   }
 }
 </script>

@@ -4,7 +4,6 @@ import { evaluateExpression, type Conditions } from './evaluateExpression.js';
 
 export type { Conditions };
 
-
 const DIRECTIVE_PATTERN = /\s*(?:<!--|\{?\/\*)\s+#(if(?:n?def)?|else|endif)((?<=#i\S*)[\s\S]+?|\s+)(?:(?<=<!--.*)-->|(?<=\/\*.*)\*\/\}?)/g;
 
 type DirectiveType = 'ifdef' | 'ifndef' | 'if' | 'else' | 'endif';
@@ -22,7 +21,7 @@ interface EvaluatedDirective extends Directive {
 
 interface ProcessResult {
   code: string;
-  sourceMap?: SourceMap;
+  map?: SourceMap;
 }
 
 interface ProcessOptions {
@@ -156,7 +155,7 @@ function processCode(
     }
     return {
       code: magicString.toString(),
-      sourceMap: magicString.generateMap({ includeContent: true }),
+      map: magicString.generateMap({ includeContent: true }),
     };
   }
 
