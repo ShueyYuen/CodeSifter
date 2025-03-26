@@ -57,7 +57,10 @@ export const ConditionalCode: UnpluginInstance<Options> = createUnplugin((rawOpt
 
     rollup: {
       options(rollupOptions) {
-        console.log('rollupOptions', rollupOptions);
+        return {
+          ...rollupOptions,
+          define: macroDefinitions
+        };
       }
     },
 
@@ -69,6 +72,6 @@ export const ConditionalCode: UnpluginInstance<Options> = createUnplugin((rawOpt
     rspack(compiler) {
       const macroDefinitionPlugin = new compiler.rspack.DefinePlugin(macroDefinitions);
       macroDefinitionPlugin.apply(compiler);
-    }
+    },
   });
 });

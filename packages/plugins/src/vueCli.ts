@@ -22,7 +22,6 @@ const vueCliPlugin = (rawOptions: Options = {}) => {
     apply(compiler) {
       compiler.hooks.compilation.tap(NAME, (compilation) => {
         HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(NAME, (data, cb) => {
-          console.log('Processing HTML file:', data.outputName);
           const { code } = processCode(data.html, {
             conditions: options.conditions,
             filename: data.outputName,
