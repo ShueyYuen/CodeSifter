@@ -29,19 +29,21 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./vite": "./dist/vite.js",
+    "./vite": "./dist/vitePlugin.js",
     "./webpack": "./dist/webpackPlugin.js",
     "./rspack": "./dist/rspack.js",
-    "./rollup": "./dist/rollup.js",
+    "./rollup": "./dist/rollupPlugin.js",
     "./rolldown": "./dist/rolldown.js",
     "./esbuild": "./dist/esbuild.js",
     "./farm": "./dist/farm.js",
-    "./api": "./dist/api.js",
+    "./core": "./dist/core/index.js",
     "./*": "./*"
   },
   "devDependencies": {
+    "@rspack/core": "1.2.8",
     "@types/node": "22.13.11",
     "@types/webpack": "5.28.5",
+    "esbuild": "0.25.1",
     "rollup": "4.37.0",
     "typescript": "5.8.2",
     "webpack": "5.98.0"
@@ -50,5 +52,37 @@
     "magic-string": "0.30.17",
     "unplugin": "^2.2.2",
     "unplugin-utils": "0.2.4"
+  },
+  "peerDependencies": {
+    "@farmfe/core": ">=1",
+    "@nuxt/kit": "^3",
+    "@nuxt/schema": "^3",
+    "esbuild": "*",
+    "rollup": ">=3",
+    "vite": ">=3",
+    "webpack": "^4 || ^5"
+  },
+  "peerDependenciesMeta": {
+    "@farmfe/core": {
+      "optional": true
+    },
+    "@nuxt/kit": {
+      "optional": true
+    },
+    "@nuxt/schema": {
+      "optional": true
+    },
+    "esbuild": {
+      "optional": true
+    },
+    "rollup": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    },
+    "webpack": {
+      "optional": true
+    }
   }
 }
