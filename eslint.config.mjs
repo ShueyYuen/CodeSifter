@@ -1,15 +1,61 @@
-import { defineConfig } from "eslint/config";
 import globals from "globals";
-import js from "@eslint/js";
+import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 
 
-export default defineConfig([
+export default tseslint.config(
   { ignores: ["node_modules/", "**/dist/"] },
-  { files: ["**/*.{js,mjs,cjs,ts}"] },
-  { files: ["**/*.{js,mjs,cjs,ts}"], languageOptions: { globals: globals.browser } },
-  { files: ["**/*.{js,mjs,cjs,ts}"], plugins: { js }, extends: ["js/recommended"] },
-  tseslint.configs.recommended,
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...tseslint.configs.stylistic,
+  {
+    name: 'disables/test',
+    files: ["**/*.spec.[jt]s?(x)"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2025,
+        ...globals.vitest
+      }
+    },
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+    },
+  },
+  {
+    files: ["**/*.{js,mjs,cjs,ts}"],
+    ignores: ['**/__tests__/**'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        sourceType: 'module',
+        ecmaVersion: 'latest',
+        project: [
+          './packages/*/tsconfig.json',
+          './playground/*/tsconfig.json',
+        ]
+      },
+      globals: {
+        ...globals.node,
+        ...globals.es2025,
+      }
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+    }
+  },
   {
     files: ["**/*.config.{js,mjs,cjs}"],
     languageOptions: { globals: globals.node },
@@ -17,4 +63,25 @@ export default defineConfig([
       "@typescript-eslint/no-require-imports": "off",
     }
   },
-]);
+  {
+    name: 'disables/typechecking',
+    files: [
+      '**/*.js',
+      '**/*.mjs',
+      '**/*.cjs',
+      '**/*.d.ts',
+      '**/*.d.cts',
+      '**/__tests__/**',
+      'docs/**',
+      'playground/**',
+      'scripts/**',
+      '**/vitest.config.ts',
+      '**/vitest.config.e2e.ts',
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: false,
+      },
+    },
+  },
+);

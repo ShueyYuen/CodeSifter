@@ -7,7 +7,8 @@
   "scripts": {
     "lint": "eslint --cache .",
     "build": "pnpm run -C packages/plugins build",
-    "build:all": "pnpm -r build"
+    "build:all": "pnpm -r build",
+    "test": "pnpm run -F \"./packages/**\" test"
   },
   "keywords": [
     "vite",

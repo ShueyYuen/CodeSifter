@@ -19,7 +19,7 @@ type MustRequired<T> = {
 }
 export type ResolvedOptions = MustRequired<Omit<Options, 'useMacroDefination'>> & {
   sourcemap: boolean;
-  macroDefinitions: Array<Replacer>;
+  macroDefinitions: Replacer[];
 };
 
 const UPPER_CASE = /^[A-Z_]+$/;
@@ -39,7 +39,7 @@ export function resolveOptions(options: Options): ResolvedOptions {
     exclude: exclude || [/node_modules/, /\.git/, /\.nuxt/],
     conditions: conditions || {},
     sourcemap: true,
-    macroDefinitions: conditions && useMacroDefination !== false ? Object.keys(conditions).reduce<Array<Replacer>>((acc, key) => {
+    macroDefinitions: conditions && useMacroDefination !== false ? Object.keys(conditions).reduce<Replacer[]>((acc, key) => {
       acc.push({ find: new RegExp(`\\b__${key}__\\b`, 'g'), replacement: JSON.stringify(!!conditions[key]) });
       return acc;
     }, []) : [],

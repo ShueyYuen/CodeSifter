@@ -90,7 +90,7 @@ function getRemovedSections(
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new SyntaxError(`Error evaluating directive condition`, {
-            cause: start + <number>error.cause,
+            cause: start + (error.cause as number),
           });
         }
       }
@@ -165,7 +165,7 @@ function processCode(
   options: ProcessOptions = DEFAULT_OPTIONS
 ): TransformResult | null {
   const { conditions, sourcemap, macroDefinitions } =
-    <Required<ProcessOptions>>Object.assign(structuredClone(DEFAULT_OPTIONS), options);
+    Object.assign(structuredClone(DEFAULT_OPTIONS), options) as Required<ProcessOptions>;
 
   const magicString = new MagicString(code);
 
@@ -236,7 +236,7 @@ function parseDirectives(code: string, pattern: RegExp): Directive[] {
       const expectedType = DIRECTIVE_SEQUENCE_MAP[parentDirective.type];
       if (type.startsWith(expectedType)) {
         parentDirective.next = directive;
-        if (isElseDirective(<DirectiveType>type)) {
+        if (isElseDirective((type as DirectiveType))) {
           stack.push(directive);
         }
       } else {

@@ -9,7 +9,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "keywords": [
     "webpack",
@@ -49,6 +51,7 @@
     "esbuild": "0.25.1",
     "rollup": "4.37.0",
     "typescript": "5.8.2",
+    "vitest": "3.0.9",
     "webpack": "5.98.0"
   },
   "dependencies": {

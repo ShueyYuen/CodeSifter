@@ -1,7 +1,4 @@
-export interface Conditions {
-  [key: string]: boolean;
-}
-
+export type Conditions = Record<string, boolean>;
 /**
  * Evaluates a boolean expression with operators ||, &&, !, and parentheses
  * @param expression - The expression to evaluate

@@ -17,7 +17,7 @@ const vueCliPlugin = (rawOptions: Options = {}) => {
   const options = resolveOptions(rawOptions);
   const filter = createFilter(options.include, [options.exclude, /\.html$/].flat());
 
-  return <WebpackPluginInstance>{
+  return {
     name: NAME,
     apply(compiler) {
       compiler.hooks.compilation.tap(NAME, (compilation) => {
@@ -37,7 +37,7 @@ const vueCliPlugin = (rawOptions: Options = {}) => {
         options: rawOptions,
       });
     }
-  }
+  } as WebpackPluginInstance
 }
 
 export default vueCliPlugin;
