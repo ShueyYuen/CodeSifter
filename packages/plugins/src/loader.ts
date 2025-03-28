@@ -1,10 +1,9 @@
-import { processCode, Conditions } from './core/process.js';
+import { type Options, resolveOptions } from './core/options.js';
+import { processCode } from './core/process.js';
 
 import type { LoaderDefinitionFunction } from 'webpack';
 
-interface LoaderOptions {
-  conditions?: Conditions;
-}
+type LoaderOptions = Omit<Options, 'include' | 'exclude'>;
 
 /**
  * Webpack loader for conditional compilation
@@ -12,18 +11,17 @@ interface LoaderOptions {
  * @returns Processed code
  */
 const codeSifter: LoaderDefinitionFunction<LoaderOptions> = function (source: string) {
-  const options = this.getOptions() || {};
-  const conditions = options.conditions || {};
-  this.async();
+  const options = resolveOptions(this.getOptions() || {});
   try {
-    const { code, map } = processCode(source, {
-      conditions,
-      filename: this.resourcePath,
+    const result = processCode(source, {
+      ...options,
+      sourcemap: this.sourceMap !== false,
     });
-    this.callback(null, code, map);
+    if (result) {
+      this.callback(null, result.code, result.map);
+    }
   } catch (error) {
     this.emitError(new Error(`Conditional compilation error in ${this.resourcePath}: ${error instanceof Error ? error.message : String(error)}`));
-    return source;
   }
 };
 

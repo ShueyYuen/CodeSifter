@@ -22,12 +22,11 @@ const vueCliPlugin = (rawOptions: Options = {}) => {
     apply(compiler) {
       compiler.hooks.compilation.tap(NAME, (compilation) => {
         HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(NAME, (data, cb) => {
-          const { code } = processCode(data.html, {
-            conditions: options.conditions,
-            filename: data.outputName,
+          const result = processCode(data.html, {
+            ...options,
             sourcemap: false,
           });
-          data.html = code;
+          data.html = result ? result.code : data.html;
           cb(null, data);
         })
       });
@@ -35,7 +34,8 @@ const vueCliPlugin = (rawOptions: Options = {}) => {
         enforce: 'pre',
         test: (id) => filter(id),
         loader: 'code-sifter/loader',
-      })
+        options: rawOptions,
+      });
     }
   }
 }

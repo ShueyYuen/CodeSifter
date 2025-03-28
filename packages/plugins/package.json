@@ -1,6 +1,6 @@
 {
   "name": "code-sifter",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A conditional compilation plugin for webpack and rollup",
   "type": "module",
   "repository": {
@@ -22,7 +22,8 @@
   "author": "Shuey Yuen <me@cofal.cn>",
   "license": "MIT",
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -34,7 +35,7 @@
     "./rspack": "./dist/rspack.js",
     "./rollup": "./dist/rollupPlugin.js",
     "./rolldown": "./dist/rolldown.js",
-    "./esbuild": "./dist/esbuild.js",
+    "./esbuild": "./dist/esbuildPlugin.js",
     "./farm": "./dist/farm.js",
     "./vue-cli": "./dist/vueCli.js",
     "./core": "./dist/core/index.js",

@@ -10,7 +10,6 @@ function preventUnpluginStupidMeta<T>(o: T): T {
       return {
         name: 'conditional-code',
         version: '1.0.0',
-        framework: 'vue',
       };
     },
     set() {
@@ -23,55 +22,62 @@ function preventUnpluginStupidMeta<T>(o: T): T {
 
 export const ConditionalCode: UnpluginInstance<Options> = createUnplugin((rawOptions = {}) => {
   const options = resolveOptions(rawOptions);
-  const macroDefinitions = Object.keys(options.conditions).reduce<Record<string, boolean>>((acc, key) => {
-    acc[`__${key}__`] = !!options.conditions[key];
-    return acc;
-  }, {});
+  const hasDefinitions = Object.keys(options.conditions).length > 0;
 
   const filter = createFilter(options.include, options.exclude);
-
-  const processOptions = {
-    conditions: options.conditions,
-  }
 
   const name = 'conditional-code';
   return preventUnpluginStupidMeta<UnpluginOptions>({
     name,
     enforce: 'pre',
 
+    buildStart() {
+      const { conditions } = options;
+      const hasNonbooleanConditions = Object.values(conditions).some((condition) => typeof condition !== 'boolean');
+      if (hasNonbooleanConditions) {
+        console.warn(
+          `[${name}] Warning: Non-boolean conditions detected. They will be converted to boolean by '!!'.`,
+        );
+      }
+    },
+
     transformInclude(id) {
+      if (!hasDefinitions) {
+        return false;
+      }
       return filter(id);
     },
 
     transform(code) {
-      return processCode(code, processOptions);
+      return processCode(code, options);
     },
 
-    vite: {
-      config() {
-        return {
-          define: macroDefinitions,
-        }
-      }
+    esbuild: {
+      setup(build) {
+        const needsSourceMap = build.initialOptions.sourcemap !== false;
+        options.sourcemap = needsSourceMap;
+      },
     },
 
     rollup: {
-      options(rollupOptions) {
-        return {
-          ...rollupOptions,
-          define: macroDefinitions
-        };
-      }
-    },
-
-    webpack(compiler) {
-      const macroDefinitionPlugin = new compiler.webpack.DefinePlugin(macroDefinitions);
-      macroDefinitionPlugin.apply(compiler);
+      outputOptions(outputOptions) {
+        const needsSourceMap = outputOptions.sourcemap !== false;
+        options.sourcemap = needsSourceMap;
+      },
     },
 
     rspack(compiler) {
-      const macroDefinitionPlugin = new compiler.rspack.DefinePlugin(macroDefinitions);
-      macroDefinitionPlugin.apply(compiler);
+      options.sourcemap = compiler.options.devtool !== false;
+    },
+
+    vite: {
+      configResolved(config) {
+        options.sourcemap = config.command === 'build' ? !!config.build.sourcemap : true;
+      },
+    },
+
+    webpack(compiler) {
+      options.sourcemap = compiler.options.devtool !== false;
     },
   });
 });

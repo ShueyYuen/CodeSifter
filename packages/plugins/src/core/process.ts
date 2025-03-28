@@ -1,6 +1,7 @@
 import MagicString, { type SourceMap } from 'magic-string';
 
 import { evaluateExpression, type Conditions } from './evaluateExpression.js';
+import type { Replacer, ResolvedOptions } from './options.js';
 
 export type { Conditions };
 
@@ -19,16 +20,12 @@ interface EvaluatedDirective extends Directive {
   evaluated: boolean;
 }
 
-interface ProcessResult {
+interface TransformResult {
   code: string;
   map?: SourceMap;
 }
 
-interface ProcessOptions {
-  conditions?: Conditions;
-  filename?: string;
-  sourcemap?: boolean;
-}
+type ProcessOptions = Omit<ResolvedOptions, 'include' | 'exclude'>;
 
 const isElseDirective = /* #__PURE__ */ (type: DirectiveType) => type === 'else';
 
@@ -124,8 +121,38 @@ function getRemovedSections(
 const DEFAULT_OPTIONS: ProcessOptions = {
   conditions: {},
   sourcemap: true,
-  filename: 'unknown',
+  macroDefinitions: [],
 };
+
+function removeConditionalSections(code: string, magicString: MagicString, conditions: Conditions) {
+  const directives = parseDirectives(code, DIRECTIVE_PATTERN);
+
+  if (!directives.length) {
+    return false;
+  }
+
+  const removedSections = getRemovedSections(directives, conditions);
+
+  for (const [start, end] of removedSections) {
+    magicString.remove(start, end);
+  }
+  return true;
+}
+
+function transformMacroDefinitions(code: string, magicString: MagicString, replacer: Replacer[]) {
+  let hasChanged = false;
+  let match: RegExpExecArray | null;
+  for (const { find, replacement } of replacer) {
+    find.lastIndex = 0;
+    while ((match = find.exec(code)) !== null) {
+      const start = match.index;
+      const end = start + match[0].length;
+      magicString.overwrite(start, end, replacement);
+      hasChanged = true;
+    }
+  }
+  return hasChanged;
+}
 
 /**
  * Process source code with conditional compilation directives
@@ -136,36 +163,27 @@ const DEFAULT_OPTIONS: ProcessOptions = {
 function processCode(
   code: string,
   options: ProcessOptions = DEFAULT_OPTIONS
-): ProcessResult {
-  const { conditions, filename, sourcemap } =
+): TransformResult | null {
+  const { conditions, sourcemap, macroDefinitions } =
     <Required<ProcessOptions>>Object.assign(structuredClone(DEFAULT_OPTIONS), options);
 
-  // Find all conditional directives
-  const directives = parseDirectives(code, DIRECTIVE_PATTERN);
-  const removedSections = getRemovedSections(directives, conditions);
+  const magicString = new MagicString(code);
 
-  if (!removedSections.length) {
-    return { code };
+  let hasChanged = removeConditionalSections(code, magicString, conditions);
+
+  if (macroDefinitions.length) {
+    hasChanged ||= transformMacroDefinitions(code, magicString, macroDefinitions);
   }
 
+  if (!hasChanged) {
+    return null;
+  }
+
+  const result: TransformResult = { code: magicString.toString() };
   if (sourcemap) {
-    const magicString = new MagicString(code, { filename });
-    for (const [start, end] of removedSections) {
-      magicString.remove(start, end);
-    }
-    return {
-      code: magicString.toString(),
-      map: magicString.generateMap({ includeContent: true }),
-    };
+    result.map = magicString.generateMap({ hires: true });
   }
-
-  let result = '', lastPos = 0;
-  for (const [start, end] of removedSections) {
-    result += code.slice(lastPos, start);
-    lastPos = end;
-  }
-  result += code.slice(lastPos);
-  return { code: result };
+  return result;
 }
 
 /**
@@ -262,5 +280,5 @@ function evaluateDirectiveCondition(directive: Directive, conditions: Conditions
 export {
   processCode,
   type Directive,
-  type ProcessResult
+  type TransformResult
 };
