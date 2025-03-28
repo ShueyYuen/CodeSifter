@@ -9,5 +9,10 @@ module.exports = {
     filename: 'bundle.js',
   },
   devtool: 'source-map',
-  plugins: [ConditionalCode()],
+  plugins: [ConditionalCode({
+    conditions: {
+      IS_LINUX: process.env.OS === 'Linux',
+      IS_PRODUCTION: process.env.NODE_ENV === "production",
+    },
+  })],
 };

@@ -13,3 +13,5 @@ const a = createServer({
   caching: true,
   /* #endif */
 });
+
+console.log('Am I running in linux? ', __IS_LINUX__);

@@ -17,3 +17,5 @@ app.config.performance = true;
 
 // Mount the app to the #app element in index.html
 app.mount('#app');
+
+console.log('Am I running in linux? ', __IS_LINUX__);
