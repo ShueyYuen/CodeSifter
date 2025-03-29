@@ -212,12 +212,12 @@ function parseDirectives(code: string, pattern: RegExp): Directive[] {
 
   while ((match = pattern.exec(code)) !== null) {
     const [matched, type, condition] = match;
-    const directive = <Directive>{
+    const directive = {
       start: match.index,
       end: match.index + matched.length,
       type,
       condition: condition.trim() || false,
-    };
+    } as Directive;
 
     // 'i' indicates if[[n]def]
     if (type.startsWith('i')) {

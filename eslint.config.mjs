@@ -2,7 +2,6 @@ import globals from "globals";
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 
-
 export default tseslint.config(
   { ignores: ["node_modules/", "**/dist/"] },
   eslint.configs.recommended,
@@ -31,10 +30,6 @@ export default tseslint.config(
       parserOptions: {
         sourceType: 'module',
         ecmaVersion: 'latest',
-        project: [
-          './packages/*/tsconfig.json',
-          './playground/*/tsconfig.json',
-        ]
       },
       globals: {
         ...globals.node,
@@ -83,5 +78,17 @@ export default tseslint.config(
         project: false,
       },
     },
+  },
+  {
+    name: 'playground/globals',
+    files: ["playground/**"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2025,
+        __IS_LINUX__: 'readonly',
+        __IS_PRODUCTION__: 'readonly',
+      }
+    }
   },
 );

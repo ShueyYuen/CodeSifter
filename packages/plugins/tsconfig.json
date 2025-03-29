@@ -1,32 +1,10 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "lib": [
-      "ESNext"
-    ],
-    "module": "Preserve",
-    "moduleResolution": "bundler",
-    "declaration": true,
-    "moduleDetection": "force",
-    "outDir": "dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "types": [
-      "node"
-    ],
-    "baseUrl": "src",
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "isolatedDeclarations": true,
-    "forceConsistentCasingInFileNames": true
-  },
-  "include": [
-    "src/**/*",
-  ],
-  "exclude": [
-    "node_modules",
-  ],
   "references": [
-    { "path": "./tsconfig.test.json"  }
-  ]
+    {
+      "path": "./tsconfig.test.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
 }
