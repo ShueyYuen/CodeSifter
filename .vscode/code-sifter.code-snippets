@@ -1,0 +1,30 @@
+{
+  "code-sifter #if*": {
+    "prefix": "#if",
+    "body": [
+      "${BLOCK_COMMENT_START} #${1|if,ifdef,ifndef|} ${2|IS_LINUX,LIS_PRODUCTION|} ${BLOCK_COMMENT_END}",
+      "${3:/* code */}",
+      "${BLOCK_COMMENT_START} #endif ${BLOCK_COMMENT_END}",
+      "${0}",
+    ],
+    "description": "Code Sifter: [#if, #ifdef, #ifndef], #endif",
+  },
+  "code-sifter #ifelse*": {
+    "prefix": "#ie",
+    "body": [
+      "${BLOCK_COMMENT_START} #${1|if,ifdef,ifndef|} ${2|IS_LINUX,LIS_PRODUCTION|} ${BLOCK_COMMENT_END}",
+      "${3:/* code */}",
+      "${BLOCK_COMMENT_START} #else ${BLOCK_COMMENT_END}",
+      "${4:/* code */}",
+      "${BLOCK_COMMENT_START} #endif ${BLOCK_COMMENT_END}",
+      "${0}",
+    ],
+    "description": "Code Sifter: [#if, #ifdef, #ifndef], #else, #endif",
+  },
+  "code-sifter macroDefine?": {
+    "prefix": "__?",
+    "body": "${1|__IS_LINUX__,__LIS_PRODUCTION__|} ? ${2} : ${3}",
+    "description": "Code Sifter: ternary operator with macroDefine",
+    "scope": "javascript,javascriptreact"
+  }
+}

@@ -49,7 +49,7 @@ const processor = {
   }
 };
 
-type ESLintComment = {
+interface ESLintComment {
   value: string;
   type: string;
   range?: [number, number];
