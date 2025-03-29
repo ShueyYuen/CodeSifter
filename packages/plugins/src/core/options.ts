@@ -6,7 +6,7 @@ export interface Options {
   include?: FilterPattern;
   exclude?: FilterPattern;
   conditions?: Conditions;
-  useMacroDefination?: boolean;
+  useMacroDefination?: boolean | FilterPattern;
 }
 
 export interface Replacer {
@@ -35,7 +35,7 @@ export function resolveOptions(options: Options): ResolvedOptions {
   }
 
   return {
-    include: include || [/\.[cm]?[jt]sx?$/, /\.(le|(s|p(ost)?)?c|sa)ss$/, /\.(vue|styl(us)?|postcss|pug|html)$/],
+    include: include || [/\.[cm]?[jt]sx?$/, /\.(le|(s|p(ost)?)?c|sa)ss$/, /\.(vue|styl(us)?|pug|html)$/],
     exclude: exclude || [/node_modules/, /\.git/, /\.nuxt/],
     conditions: conditions || {},
     sourcemap: true,

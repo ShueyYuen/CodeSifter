@@ -8,7 +8,8 @@
     "lint": "eslint --cache .",
     "build": "pnpm run -C packages/plugins build",
     "build:all": "pnpm -r build",
-    "test": "pnpm run -F \"./packages/**\" test"
+    "test": "pnpm run -F \"./packages/**\" test",
+    "coverage": "pnpm run -F \"./packages/**\" coverage"
   },
   "keywords": [
     "vite",
@@ -27,11 +28,13 @@
   "devDependencies": {
     "@eslint/js": "^9.23.0",
     "@types/node": "22.13.11",
+    "@vitest/coverage-v8": "3.0.9",
     "eslint": "9.23.0",
     "eslint-config-standard": "17.1.0",
     "globals": "16.0.0",
     "prettier": "3.5.3",
-    "typescript-eslint": "8.28.0"
+    "typescript-eslint": "8.28.0",
+    "vitest": "3.0.9"
   },
   "engines": {
     "node": ">=18.12.0"

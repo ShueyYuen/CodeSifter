@@ -1,4 +1,4 @@
-import { evaluateExpression, Conditions } from '../../src/core/evaluateExpression';
+import { evaluateExpression, Conditions } from '../../src/core/evaluateExpression.js';
 
 describe('evaluateExpression', () => {
   it('should evaluate simple OR expressions', () => {

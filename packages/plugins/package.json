@@ -40,7 +40,7 @@
     "./esbuild": "./dist/esbuildPlugin.js",
     "./farm": "./dist/farm.js",
     "./vue-cli": "./dist/vueCli.js",
-    "./core": "./dist/core/index.js",
+    "./core": "./dist/core/process.js",
     "./loader": "./dist/loader.js",
     "./*": "./*"
   },
@@ -48,10 +48,10 @@
     "@rspack/core": "1.2.8",
     "@types/node": "22.13.11",
     "@types/webpack": "5.28.5",
+    "@vitest/coverage-v8": "3.0.9",
     "esbuild": "0.25.1",
     "rollup": "4.37.0",
     "typescript": "5.8.2",
-    "vitest": "3.0.9",
     "webpack": "5.98.0"
   },
   "dependencies": {

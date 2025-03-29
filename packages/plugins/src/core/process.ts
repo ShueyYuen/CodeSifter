@@ -13,6 +13,7 @@ interface Directive {
   end: number;
   type: DirectiveType;
   condition: string | null;
+  branchEntry?: boolean;
   next?: Directive;
 }
 
@@ -80,7 +81,7 @@ function getRemovedSections(
   while (directive = directives.shift()) {
     const { start, end, type: directiveType } = directive;
     removed.push([start, end]);
-    if (directive.condition) {
+    if (directive.branchEntry) {
       try {
         const evaluated = evaluateDirectiveCondition(directive, conditions);
         stack.push({ ...directive, evaluated });
@@ -139,12 +140,12 @@ function removeConditionalSections(code: string, magicString: MagicString, condi
   return true;
 }
 
-function transformMacroDefinitions(code: string, magicString: MagicString, replacer: Replacer[]) {
+function transformMacroDefinitions(code: string, magicString: MagicString, replacers: Replacer[]) {
   let hasChanged = false;
   let match: RegExpExecArray | null;
-  for (const { find, replacement } of replacer) {
+  for (const { find, replacement } of replacers) {
     find.lastIndex = 0;
-    while ((match = find.exec(code)) !== null) {
+    while ((match = find.exec(code))) {
       const start = match.index;
       const end = start + match[0].length;
       magicString.overwrite(start, end, replacement);
@@ -172,7 +173,7 @@ function processCode(
   let hasChanged = removeConditionalSections(code, magicString, conditions);
 
   if (macroDefinitions.length) {
-    hasChanged ||= transformMacroDefinitions(code, magicString, macroDefinitions);
+    hasChanged = transformMacroDefinitions(code, magicString, macroDefinitions) || hasChanged;
   }
 
   if (!hasChanged) {
@@ -210,20 +211,17 @@ function parseDirectives(code: string, pattern: RegExp): Directive[] {
   pattern.lastIndex = 0;
 
   while ((match = pattern.exec(code)) !== null) {
-    if (match.index === pattern.lastIndex) {
-      pattern.lastIndex++;
-      continue;
-    }
     const [matched, type, condition] = match;
-    const directive = {
+    const directive = <Directive>{
       start: match.index,
       end: match.index + matched.length,
       type,
-      condition: condition.trim() || null,
-    } as Directive;
+      condition: condition.trim() || false,
+    };
 
     // 'i' indicates if[[n]def]
     if (type.startsWith('i')) {
+      directive.branchEntry = true;
       stack.push(directive);
     } else {
       const parentDirective = stack.pop();
@@ -277,6 +275,7 @@ function evaluateDirectiveCondition(directive: Directive, conditions: Conditions
   }
 }
 
+export { resolveOptions } from './options.js';
 export {
   processCode,
   type Directive,

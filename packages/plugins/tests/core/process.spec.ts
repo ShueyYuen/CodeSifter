@@ -55,6 +55,30 @@ describe('processCode', () => {
     expect(result!.map).toBeDefined();
   });
 
+  it('should use options.useMacroDefination', () => {
+    const code = `
+    createServer({
+      /* #if IS_LINUX */
+      paral: __IS_HIGHPERFORMANCE_DEVICE__ ? 1000 : 10,
+      /* #endif */
+    });
+    `;
+
+    const options = resolveOptions({
+      conditions: {
+        IS_LINUX: true,
+        IS_HIGHPERFORMANCE_DEVICE: true,
+      },
+      useMacroDefination: true,
+    });
+    const result = processCode(code, options);
+    expect(result!.code).toBe(`
+    createServer({
+      paral: true ? 1000 : 10,
+    });
+    `)
+  });
+
   it('should work within css correctly', () => {
     const code = `
     /* #if IS_LINUX */
@@ -81,6 +105,21 @@ describe('processCode', () => {
     }
     `);
   });
+
+  it('should treat empty condition as false', () => {
+    const code = `
+    /* #if */
+    console.log('Linux');
+    /* #else */
+    console.log('Other');
+    /* #endif */
+    `;
+    const result = processCode(code);
+    expect(result!.code).toBe(`
+    console.log('Other');
+    `);
+    expect(result!.map).toBeDefined();
+  })
 
   it('should work width complex directives', () => {
     const code = `
@@ -129,6 +168,17 @@ describe('processCode', () => {
       /* #else */
     `;
     expect(() => processCode(code, simpleOptions)).toThrow(/Unexpected #else after #else/);
+  });
+
+  it('should handle unevaluable directive condition gracefully', () => {
+    const code = `
+      /* #if IS_LINUX === true */
+      console.log('linux')
+      /* #else */
+      console.log('Other');
+      /* #endif */
+    `;
+    expect(() => processCode(code, simpleOptions)).toThrow(SyntaxError);
   });
 
   it('should return null if no changes are made', () => {

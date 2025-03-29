@@ -4,7 +4,7 @@ describe('resolveOptions', () => {
   it('should resolve default options fulfiled', () => {
     const options = resolveOptions({});
 
-    expect(options.include).toEqual([/\.[cm]?[jt]sx?$/, /\.(le|(s|p(ost)?)?c|sa)ss$/, /\.(vue|styl(us)?|postcss|pug|html)$/]);
+    expect(options.include).toEqual([/\.[cm]?[jt]sx?$/, /\.(le|(s|p(ost)?)?c|sa)ss$/, /\.(vue|styl(us)?|pug|html)$/]);
     expect(options.exclude).toEqual([/node_modules/, /\.git/, /\.nuxt/]);
     expect(options.conditions).toEqual({});
     expect(options.sourcemap).toBe(true);
