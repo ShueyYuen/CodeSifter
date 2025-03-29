@@ -17,9 +17,10 @@ describe('processCode', () => {
     `;
     const result = processCode(code, simpleOptions);
 
-    expect(result!.code).toContain("console.log('Linux');");
-    expect(result!.code).not.toContain("console.log('Other');");
-    expect(result!.code).not.toContain("console.log('Not linux');");
+    expect(result!.code).toBe(`
+      console.log('Linux');
+    `);
+    expect(result!.map).toBeDefined();
   });
 
   it('should process #ifdef correctly', () => {
@@ -32,8 +33,10 @@ describe('processCode', () => {
     `;
     const result = processCode(code, simpleOptions);
 
-    expect(result!.code).toContain("console.log('Linux');");
-    expect(result!.code).not.toContain("console.log('Other');");
+    expect(result!.code).toBe(`
+      console.log('Linux');
+    `);
+    expect(result!.map).toBeDefined();
   });
 
   it('should process #ifndef correctly', () => {
@@ -46,11 +49,13 @@ describe('processCode', () => {
     `;
     const result = processCode(code);
 
-    expect(result!.code).toContain("console.log('Linux');");
-    expect(result!.code).not.toContain("console.log('Other');");
+    expect(result!.code).toBe(`
+      console.log('Linux');
+    `);
+    expect(result!.map).toBeDefined();
   });
 
-  it('should work with css correctly', () => {
+  it('should work within css correctly', () => {
     const code = `
     /* #if IS_LINUX */
     .logo {
@@ -64,12 +69,40 @@ describe('processCode', () => {
       color: red;
     }
     /* #endif */
-    `
+    `;
     const result = processCode(code, simpleOptions);
 
-    expect(result!.code).toContain(".logo");
-    expect(result!.code).not.toContain(".text");
-  })
+    expect(result!.code).toBe(`
+    .logo {
+      height: 6em;
+      padding: 1.5em;
+      will-change: filter;
+      transition: filter 300ms;
+    }
+    `);
+  });
+
+  it('should work width complex directives', () => {
+    const code = `
+    createServer({
+      /* #if IS_LINUX && IS_HIGHPERFORMANCE_DEVICE */
+      paral: 1000,
+      /* #endif */
+    });
+    `;
+    const options = resolveOptions({
+      conditions: {
+        IS_LINUX: true,
+        IS_HIGHPERFORMANCE_DEVICE: true,
+      }
+    });
+    const result = processCode(code, options);
+    expect(result!.code).toBe(`
+    createServer({
+      paral: 1000,
+    });
+    `)
+  });
 
   it('should handle unmatched directives gracefully', () => {
     const code = `
@@ -95,7 +128,7 @@ describe('processCode', () => {
       console.log('Other');
       /* #else */
     `;
-    expect(() => processCode(code, simpleOptions)).toThrow(/Unexpected #/);
+    expect(() => processCode(code, simpleOptions)).toThrow(/Unexpected #else after #else/);
   });
 
   it('should return null if no changes are made', () => {
