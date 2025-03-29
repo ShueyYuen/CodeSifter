@@ -2,7 +2,9 @@
 
 [![npm](https://img.shields.io/npm/v/code-sifter.svg)](https://npmjs.com/package/code-sifter)
 [![Unit Test](https://github.com/ShueyYuen/CodeSifter/actions/workflows/unit-test.yml/badge.svg)](https://github.com/ShueyYuen/CodeSifter/actions/workflows/unit-test.yml)
-[![License][license-src]][license-href]
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/ShueyYuen/CodeSifter/blob/main/LICENSE)
+
+
 
 A powerful plugin for webpack, rollup, vite, and other bundlers that provides conditional compilation based on comment directives.
 
