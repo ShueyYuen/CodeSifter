@@ -1,5 +1,9 @@
 # CodeSifter
 
+[![npm](https://img.shields.io/npm/v/code-sifter.svg)](https://npmjs.com/package/code-sifter)
+[![Unit Test](https://github.com/ShueyYuen/CodeSifter/actions/workflows/unit-test.yml/badge.svg)](https://github.com/ShueyYuen/CodeSifter/actions/workflows/unit-test.yml)
+[![License][license-src]][license-href]
+
 A powerful plugin for webpack, rollup, vite, and other bundlers that provides conditional compilation based on comment directives.
 
 ## Installation
@@ -10,17 +14,20 @@ npm install code-sifter --save-dev
 
 ## Features
 
-- Conditional code inclusion/exclusion using comment directives
-- Supports multiple file types (JavaScript, HTML, CSS, Vue, etc.)
-- Works with multiple bundlers (webpack, rollup, vite, esbuild, rspack, farm)
-- Simple configuration
-- Smart whitespace cleanup to maintain code formatting
+- [x] Conditional code inclusion/exclusion using comment directives
+- [x] Supports multiple file types (JavaScript, TypeScript, CSS, HTML, Vue, etc.)
+- [x] Works with multiple bundlers (webpack, rollup, vite, esbuild, rspack, farm)
+- [x] Smart whitespace cleanup to maintain code formatting
+- [x] Source map support
+- [ ] ESLint integration
 
 ## Usage
 
-This plugin processes special comment directives to include or exclude code based on conditions:
+CodeSifter processes special comment directives to include or exclude code based on conditions:
 
 - `/* #if CONDITION */` - Start a conditional block
+- `/* #ifdef CONDITION */` - Check if condition is defined
+- `/* #ifndef CONDITION */` - Check if condition is not defined
 - `/* #else */` - Alternative code
 - `/* #endif */` - End a conditional block
 
@@ -44,12 +51,11 @@ import { createServer } from './create-server';
 const a = createServer({ delay: 100, });
 ```
 
-> [!WARNING]
-> While this plugin supports conditional code removal via comments, this approach doesn't conform to standard JavaScript/TypeScript syntax and may not be considered best practice. Consider using proper imports and exports with tree-shaking capabilities of modern bundlers for a more maintainable codebase.
-
 ## Configuration
 
-### Webpack
+<details>
+
+<summary>Webpack</summary>
 
 ```javascript
 // webpack.config.js
@@ -68,7 +74,11 @@ module.exports = {
 };
 ```
 
-### Rollup
+</details>
+
+<details>
+
+<summary>Rollup</summary>
 
 ```javascript
 // rollup.config.js
@@ -87,7 +97,11 @@ export default {
 };
 ```
 
-### Vite
+</details>
+
+<details>
+
+<summary>vite</summary>
 
 ```javascript
 // vite.config.js
@@ -106,9 +120,14 @@ export default defineConfig({
 });
 ```
 
-### Esbuild
+</details>
+
+<details>
+
+<summary>Esbuild</summary>
 
 ```javascript
+// esbuild.config.js
 import { build } from 'esbuild';
 import ConditionalCode from 'code-sifter/esbuild';
 
@@ -124,7 +143,11 @@ build({
 });
 ```
 
-### Rspack
+</details>
+
+<details>
+
+<summary>Rspack</summary>
 
 ```javascript
 // rspack.config.js
@@ -142,7 +165,11 @@ export default {
 };
 ```
 
-### Farm
+</details>
+
+<details>
+
+<summary>Farm</summary>
 
 ```javascript
 // farm.config.js
@@ -160,6 +187,33 @@ export default {
 };
 ```
 
+</details>
+
+<details>
+
+<summary>VueCli</summary>
+
+```javascript
+// vue.config.js
+const ConditionalCode = require('code-sifter/vueCli');
+
+module.exports = {
+  // ...
+  configureWebpack: {
+    plugins: [
+      ConditionalCode({
+        conditions: {
+          IS_LINUX: false,
+          IS_PRODUCTION: process.env.NODE_ENV === 'production'
+        }
+      })
+    ]
+  }
+};
+```
+
+</details>
+
 ## ESLint Support
 
 CodeSifter includes an ESLint plugin to prevent false positives in conditional code blocks:
@@ -169,25 +223,60 @@ CodeSifter includes an ESLint plugin to prevent false positives in conditional c
 module.exports = {
   // ...
   plugins: ['code-sifter'],
-  processor: 'code-sifter/processor'
+  rules: {
+    'code-sifter/balanced-directives': 'error'
+  }
 };
 ```
 
-## Advanced Usage
+## Advanced Features
 
-For more advanced usage and API details, check out the examples in the playground directory:
-- [Webpack example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/webpack-example)
-- [Rollup example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/rollup-example)
-- [Vue example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/vue-example)
+### Macro Definitions
+
+CodeSifter can automatically replace macro-like symbols with their values:
+
+```javascript
+createServer({
+  /* #if IS_LINUX */
+  parallel: __IS_HIGHPERFORMANCE_DEVICE__ ? 1000 : 10,
+  /* #endif */
+});
+```
+
+With `useMacroDefination: true` and proper conditions, `__IS_HIGHPERFORMANCE_DEVICE__` will be replaced with its boolean value.
+
+> [!IMPORTANT]
+> ⚠️ **Avoid using common predefined macro names:** Do not use macro names like `PURE`, `INLINE`, `NOINLINE`, etc., as these are already widely used by JavaScript engines and bundlers for optimization purposes. Using these names may cause conflicts with other tools in your build pipeline.
+
+### Conditional Expressions
+
+Support for complex conditional expressions:
+
+```javascript
+/* #if IS_LINUX && IS_HIGHPERFORMANCE_DEVICE */
+console.log('High performance Linux machine');
+/* #endif */
+```
 
 ## API
 
 ### Options
 
-- `conditions`: Object with condition name-value pairs
-- `include`: glob-like to determine which files to process
-- `excluds`: glob-like to exclude files
+| Option | Type | Description |
+|--------|------|-------------|
+| `conditions` | `Object` | Key-value pairs where keys are UPPER_CASE condition names and values are booleans |
+| `include` | `RegExp` \| `String` \| `Array` | Files to include (defaults to JS/TS/CSS/HTML/Vue files) |
+| `exclude` | `RegExp` \| `String` \| `Array` | Files to exclude (defaults to node_modules, .git, etc.) |
+| `useMacroDefination` | `Boolean` | Whether to enable macro definition replacement |
+| `sourcemap` | `Boolean` | Whether to generate source maps |
+
+## Examples
+
+Check out the examples in the playground directory for practical implementations:
+- [Webpack example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/webpack-example)
+- [Rollup example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/rollup-example)
+- [Vue example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/vue-example)
 
 ## License
 
-MIT
+[MIT](https://github.com/ShueyYuen/CodeSifter/blob/main/LICENSE) License © 2025-PRESENT Shuey Yuen
