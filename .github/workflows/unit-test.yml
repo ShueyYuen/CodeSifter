@@ -53,7 +53,7 @@ jobs:
         run: pnpm i
 
       - name: Build
-        run: pnpm run build
+        run: pnpm run build:all
 
       - name: Test
         run: pnpm run test
