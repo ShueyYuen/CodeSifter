@@ -2,6 +2,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+    "*.css": "${capture}.css.map, ${capture}.min.css",
     "tsconfig.json": "tsconfig.*.json",
     "package.json": "pnpm-lock.yaml, pnpm-workspace.yaml",
   },

@@ -50,6 +50,7 @@
     "@types/webpack": "5.28.5",
     "@vitest/coverage-v8": "3.0.9",
     "esbuild": "0.25.1",
+    "rspack": "0.1.1",
     "rollup": "4.37.0",
     "typescript": "5.8.2",
     "webpack": "5.98.0"

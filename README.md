@@ -19,7 +19,6 @@ npm install code-sifter --save-dev
 - [x] Conditional code inclusion/exclusion using comment directives
 - [x] Supports multiple file types (JavaScript, TypeScript, CSS, HTML, Vue, etc.)
 - [x] Works with multiple bundlers (webpack, rollup, vite, esbuild, rspack, farm)
-- [x] Smart whitespace cleanup to maintain code formatting
 - [x] Source map support
 - [ ] ESLint integration
 
@@ -59,6 +58,8 @@ const a = createServer({ delay: 100, });
 
 <summary>Webpack</summary>
 
+[example for Webpack](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/webpack-example)
+
 ```javascript
 // webpack.config.js
 const ConditionalCode = require('code-sifter/webpack');
@@ -82,6 +83,8 @@ module.exports = {
 
 <summary>Rollup</summary>
 
+[example for Rollup](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/rollup-example)
+
 ```javascript
 // rollup.config.js
 import ConditionalCode from 'code-sifter/rollup';
@@ -103,7 +106,9 @@ export default {
 
 <details>
 
-<summary>vite</summary>
+<summary>Vite</summary>
+
+[example for Vite with React](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/vite-example)
 
 ```javascript
 // vite.config.js
@@ -128,6 +133,8 @@ export default defineConfig({
 
 <summary>Esbuild</summary>
 
+[example for Esbuild with React](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/esbuild-example)
+
 ```javascript
 // esbuild.config.js
 import { build } from 'esbuild';
@@ -151,6 +158,8 @@ build({
 
 <summary>Rspack</summary>
 
+[example for Rspack (with Vanilla)](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/rspack-example)
+
 ```javascript
 // rspack.config.js
 import ConditionalCode from 'code-sifter/rspack';
@@ -172,6 +181,8 @@ export default {
 <details>
 
 <summary>Farm</summary>
+
+[example for Farm with Lit](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/farm-example)
 
 ```javascript
 // farm.config.js
@@ -208,7 +219,7 @@ module.exports = {
           IS_LINUX: false,
           IS_PRODUCTION: process.env.NODE_ENV === 'production'
         }
-      })
+      }),
     ]
   }
 };
@@ -275,8 +286,6 @@ console.log('High performance Linux machine');
 ## Examples
 
 Check out the examples in the playground directory for practical implementations:
-- [Webpack example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/webpack-example)
-- [Rollup example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/rollup-example)
 - [Vue example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/vue-example)
 
 ## License

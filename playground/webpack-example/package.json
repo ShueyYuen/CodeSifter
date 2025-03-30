@@ -2,6 +2,7 @@
   "name": "webpack-example",
   "version": "1.0.0",
   "description": "Example using code-sifter with webpack",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "build": "webpack",
