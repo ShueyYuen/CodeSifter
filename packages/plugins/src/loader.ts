@@ -19,6 +19,8 @@ const codeSifter: LoaderDefinitionFunction<LoaderOptions> = function (source: st
     });
     if (result) {
       this.callback(null, result.code, result.map);
+    } else {
+      this.callback(null, source);
     }
   } catch (error) {
     this.emitError(new Error(`Conditional compilation error in ${this.resourcePath}: ${error instanceof Error ? error.message : String(error)}`));
