@@ -4,8 +4,6 @@
 [![Unit Test](https://github.com/ShueyYuen/CodeSifter/actions/workflows/unit-test.yml/badge.svg)](https://github.com/ShueyYuen/CodeSifter/actions/workflows/unit-test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/ShueyYuen/CodeSifter/blob/main/LICENSE)
 
-
-
 A powerful plugin for webpack, rollup, vite, and other bundlers that provides conditional compilation based on comment directives.
 
 ## Installation
@@ -38,12 +36,14 @@ For HTML files, use HTML comments: `<!-- #if CONDITION -->`, etc.
 
 Source code:
 ```javascript
-/* #if IS_LINUX */
+/* #if IS_LINUX & !IS_PRODUCTION */
 import { createServer } from './create-linux-server';
 /* #else */
 import { createServer } from './create-server';
 /* #endif */
-const a = createServer({ delay: /* #if IS_LINUX */ 600 /* #else */ 100 /* #endif */, });
+const a = createServer({
+  delay: /* #if IS_LINUX */ 600 /* #else */ 100 /* #endif */,
+});
 ```
 
 When processed with `{ IS_LINUX: false }`, becomes:
@@ -51,6 +51,22 @@ When processed with `{ IS_LINUX: false }`, becomes:
 import { createServer } from './create-server';
 const a = createServer({ delay: 100, });
 ```
+
+> [!CAUTION]
+> While this plugin supports conditional code removal via comments, this approach doesn't conform to standard JavaScript/TypeScript syntax and may not be considered best practice. Consider using proper imports and exports with tree-shaking capabilities of modern bundlers for a more maintainable codebase.
+
+```javascript
+// Better approach
+import { createLinuxServer } from './create-linux-server';
+import { createDefaultServer } from './create-server';
+
+const serverOption = { delay: IS_LINUX ? 600 : 100 };
+const server = __IS_LINUX__ && !__IS_PRODUCTION__
+  ? createLinuxServer(serverOption)
+  ·: createDefaultServer(serverOption);
+```
+
+When bundlers process this code with proper environment variables, unused imports and code branches will be automatically removed during tree-shaking, resulting in cleaner, more maintainable code.
 
 ## Configuration
 
@@ -275,18 +291,14 @@ console.log('High performance Linux machine');
 
 ### Options
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `conditions` | `Object` | Key-value pairs where keys are UPPER_CASE condition names and values are booleans |
-| `include` | `RegExp` \| `String` \| `Array` | Files to include (defaults to JS/TS/CSS/HTML/Vue files) |
-| `exclude` | `RegExp` \| `String` \| `Array` | Files to exclude (defaults to node_modules, .git, etc.) |
-| `useMacroDefination` | `Boolean` | Whether to enable macro definition replacement |
-| `sourcemap` | `Boolean` | Whether to generate source maps |
+| Option               | Type                            | Description                                                                       |
+| -------------------- | ------------------------------- | --------------------------------------------------------------------------------- |
+| `conditions`         | `Object`                        | Key-value pairs where keys are UPPER_CASE condition names and values are booleans |
+| `include`            | `RegExp` \| `String` \| `Array` | Files to include (defaults to JS/TS/CSS/HTML/Vue files)                           |
+| `exclude`            | `RegExp` \| `String` \| `Array` | Files to exclude (defaults to node_modules, .git, etc.)                           |
+| `useMacroDefination` | `Boolean`                       | Whether to enable macro definition replacement                                    |
+| `sourcemap`          | `Boolean`                       | Whether to generate source maps                                                   |
 
-## Examples
-
-Check out the examples in the playground directory for practical implementations:
-- [Vue example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/vue-example)
 
 ## License
 

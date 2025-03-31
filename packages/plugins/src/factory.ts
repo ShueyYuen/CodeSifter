@@ -1,8 +1,10 @@
-import { createUnplugin, type UnpluginInstance, type UnpluginOptions } from 'unplugin';
+import { createUnplugin } from 'unplugin';
 import { createFilter } from 'unplugin-utils'
-
 import { processCode } from './core/process.js';
-import { resolveOptions, type Options } from './core/options.js';
+import { resolveOptions } from './core/options.js';
+
+import type { UnpluginInstance, UnpluginOptions } from 'unplugin';
+import type { Options } from './core/options.js';
 
 function preventUnpluginStupidMeta<T>(o: T): T {
   return Object.defineProperty(o, '__unpluginMeta', {

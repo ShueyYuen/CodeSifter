@@ -4,14 +4,10 @@
     "composite": true,
     "outDir": "dist",
     "baseUrl": ".",
-    "rootDir": "./src/"
+    "rootDir": "./src/",
+    "tsBuildInfoFile": ".tsbuildinfo"
   },
   "include": [
     "src/**/*",
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.test.json"
-    }
   ]
 }

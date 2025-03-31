@@ -28,7 +28,7 @@ interface TransformResult {
 
 type ProcessOptions = Omit<ResolvedOptions, 'include' | 'exclude'>;
 
-const isElseDirective = /* #__PURE__ */ (type: DirectiveType) => type === 'else';
+const isElseDirective = (type: DirectiveType) => type === 'else';
 
 /**
  * Skip to the next paired directive in the sequence
