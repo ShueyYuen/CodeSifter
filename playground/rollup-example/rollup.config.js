@@ -1,6 +1,7 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import ConditionalCode from 'code-sifter/rollup';
 
+/** @type {import('rollup').RollupOptions} */
 export default {
   input: 'src/main.js',
   output: {

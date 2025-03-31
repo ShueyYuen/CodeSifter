@@ -1,6 +1,7 @@
 const path = require('path');
 const ConditionalCode = require('code-sifter/vue-cli');
 
+/** @type {import('@vue/cli-service').ProjectOptions} */
 module.exports = {
   // Optional: Configure other Vue CLI settings
   configureWebpack: {
