@@ -1,18 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "lib": [
-      "ESNext"
-    ],
+    "target": "ES6",
+    "lib": ["ESNext"],
     "module": "Preserve",
+    "inlineSourceMap": true,
     "moduleResolution": "bundler",
     "declaration": true,
-    "moduleDetection": "force",
     "strict": true,
     "esModuleInterop": true,
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     "skipLibCheck": true,
     "isolatedModules": true,
     "isolatedDeclarations": true,

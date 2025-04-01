@@ -12,12 +12,11 @@ import { ConditionalCode } from "./factory.js";
  * @example
  * ```ts
  * // webpack.config.js
- * import ConditionalCode from 'code-sifter/webpack';
+ * import CodeSifter from 'code-sifter/webpack';
  *
  * export default {
- *   plugins: [ConditionalCode()],
+ *   plugins: [CodeSifter()],
  * };
  */
-const webpack = ConditionalCode.webpack as  typeof ConditionalCode.webpack;
-export default webpack;
-export { webpack as 'module.exports'}
+const CodeSifter = ConditionalCode.webpack as  typeof ConditionalCode.webpack;
+export { CodeSifter as default, CodeSifter };

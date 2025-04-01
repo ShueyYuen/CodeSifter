@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Example using code-sifter with rollup",
   "main": "index.js",
+  "type": "module",
   "private": true,
   "scripts": {
     "build": "rollup -c",

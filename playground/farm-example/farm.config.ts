@@ -1,5 +1,5 @@
 import { defineConfig } from '@farmfe/core';
-import ConditionalCode from 'code-sifter/farm';
+import CodeSifter from 'code-sifter/farm';
 
 export default defineConfig({
   compilation: {
@@ -18,7 +18,7 @@ export default defineConfig({
     }
   },
   plugins: [
-    ConditionalCode({
+    CodeSifter({
       conditions: {
         IS_LINUX: true,
         IS_PRODUCTION: false,

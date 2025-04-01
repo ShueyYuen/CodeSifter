@@ -12,13 +12,12 @@ import { ConditionalCode } from "./factory.js";
  * @example
  * ```ts
  * // rolldown.config.js
- * import ConditionalCode from 'code-sifter/rolldown';
+ * import CodeSifter from 'code-sifter/rolldown';
  *
  * export default {
- *  plugins: [ConditionalCode()],
+ *  plugins: [CodeSifter()],
  * };
  * ```
  */
-const rolldown = ConditionalCode.rolldown as  typeof ConditionalCode.rolldown;
-export default rolldown;
-export { rolldown as 'module.exports'}
+const CodeSifter = ConditionalCode.rolldown as  typeof ConditionalCode.rolldown;
+export { CodeSifter as default, CodeSifter };

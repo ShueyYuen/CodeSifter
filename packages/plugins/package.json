@@ -1,6 +1,6 @@
 {
   "name": "code-sifter",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A conditional compilation plugin for webpack and rollup",
   "type": "module",
   "repository": {
@@ -8,8 +8,10 @@
     "url": "git+https://github.com/ShueyYuen/CodeSifter.git"
   },
   "scripts": {
-    "build": "tsc -p ./tsconfig.node.json",
-    "prepublishOnly": "npm run build",
+    "build": "node ./scripts/build.js",
+    "build:types": "tsc -p ./tsconfig.node.json",
+    "prepublishOnly": "npm run build && node ./scripts/prepublishOnly.js",
+    "postpublish": "rimraf README.md",
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },
@@ -27,21 +29,65 @@
     "dist",
     "README.md"
   ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/types/index.d.ts",
   "exports": {
-    ".": "./dist/index.js",
-    "./vite": "./dist/vite.js",
-    "./webpack": "./dist/webpack.js",
-    "./rspack": "./dist/rspack.js",
-    "./rollup": "./dist/rollup.js",
-    "./rolldown": "./dist/rolldown.js",
-    "./esbuild": "./dist/esbuild.js",
-    "./farm": "./dist/farm.js",
-    "./vue-cli": "./dist/vueCli.js",
-    "./core": "./dist/core/process.js",
-    "./loader": "./dist/loader.js",
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/esm/index.mjs"
+    },
+    "./vite": {
+      "types": "./dist/types/vite.d.ts",
+      "require": "./dist/cjs/vite.cjs",
+      "import": "./dist/esm/vite.mjs"
+    },
+    "./webpack": {
+      "types": "./dist/types/webpack.d.ts",
+      "require": "./dist/cjs/webpack.cjs",
+      "import": "./dist/esm/webpack.mjs"
+    },
+    "./rspack": {
+      "types": "./dist/types/rspack.d.ts",
+      "require": "./dist/cjs/rspack.cjs",
+      "import": "./dist/esm/rspack.mjs"
+    },
+    "./rollup": {
+      "types": "./dist/types/rollup.d.ts",
+      "require": "./dist/cjs/rollup.cjs",
+      "import": "./dist/esm/rollup.mjs"
+    },
+    "./rolldown": {
+      "types": "./dist/types/rolldown.d.ts",
+      "require": "./dist/cjs/rolldown.cjs",
+      "import": "./dist/esm/rolldown.mjs"
+    },
+    "./esbuild": {
+      "types": "./dist/types/esbuild.d.ts",
+      "require": "./dist/cjs/esbuild.cjs",
+      "import": "./dist/esm/esbuild.mjs"
+    },
+    "./farm": {
+      "types": "./dist/types/farm.d.ts",
+      "require": "./dist/cjs/farm.cjs",
+      "import": "./dist/esm/farm.mjs"
+    },
+    "./vue-cli": {
+      "types": "./dist/types/vueCli.d.ts",
+      "require": "./dist/cjs/vueCli.cjs",
+      "import": "./dist/esm/vueCli.mjs"
+    },
+    "./core": {
+      "types": "./dist/types/core/process.d.ts",
+      "require": "./dist/cjs/core/process.cjs",
+      "import": "./dist/esm/core/process.mjs"
+    },
+    "./loader": {
+      "types": "./dist/types/loader.d.ts",
+      "require": "./dist/cjs/loader.cjs",
+      "import": "./dist/esm/loader.mjs"
+    },
     "./*": "./*"
   },
   "devDependencies": {

@@ -60,7 +60,7 @@ const a = createServer({ delay: 100, });
 import { createLinuxServer } from './create-linux-server';
 import { createDefaultServer } from './create-server';
 
-const serverOption = { delay: IS_LINUX ? 600 : 100 };
+const serverOption = { delay: __IS_LINUX__ ? 600 : 100 };
 const server = __IS_LINUX__ && !__IS_PRODUCTION__
   ? createLinuxServer(serverOption)
   ·: createDefaultServer(serverOption);
@@ -74,16 +74,16 @@ When bundlers process this code with proper environment variables, unused import
 
 <summary>Webpack</summary>
 
-[example for Webpack](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/webpack-example)
+example: [playgroud/webpack-example/](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/webpack-example)
 
 ```javascript
 // webpack.config.js
-const ConditionalCode = require('code-sifter/webpack');
+const CodeSifter = require('code-sifter/webpack');
 
 module.exports = {
   // ...
   plugins: [
-    ConditionalCode({
+    CodeSifter({
       conditions: {
         IS_LINUX: false,
         IS_PRODUCTION: process.env.NODE_ENV === 'production'
@@ -99,16 +99,16 @@ module.exports = {
 
 <summary>Rollup</summary>
 
-[example for Rollup](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/rollup-example)
+example: [playground/rollup-example/](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/rollup-example)
 
 ```javascript
 // rollup.config.js
-import ConditionalCode from 'code-sifter/rollup';
+import CodeSifter from 'code-sifter/rollup';
 
 export default {
   // ...
   plugins: [
-    ConditionalCode({
+    CodeSifter({
       conditions: {
         IS_LINUX: false,
         IS_PRODUCTION: process.env.NODE_ENV === 'production'
@@ -124,16 +124,16 @@ export default {
 
 <summary>Vite</summary>
 
-[example for Vite with React](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/vite-example)
+example: [playground/vite-example/](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/vite-example)
 
 ```javascript
 // vite.config.js
 import { defineConfig } from 'vite';
-import ConditionalCode from 'code-sifter/vite';
+import CodeSifter from 'code-sifter/vite';
 
 export default defineConfig({
   plugins: [
-    ConditionalCode({
+    CodeSifter({
       conditions: {
         IS_LINUX: false,
         IS_PRODUCTION: process.env.NODE_ENV === 'production'
@@ -149,16 +149,16 @@ export default defineConfig({
 
 <summary>Esbuild</summary>
 
-[example for Esbuild with React](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/esbuild-example)
+example: [playground/esbuild-example/](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/esbuild-example)
 
 ```javascript
 // esbuild.config.js
 import { build } from 'esbuild';
-import ConditionalCode from 'code-sifter/esbuild';
+import CodeSifter from 'code-sifter/esbuild';
 
 build({
   plugins: [
-    ConditionalCode({
+    CodeSifter({
       conditions: {
         IS_LINUX: false,
         IS_PRODUCTION: process.env.NODE_ENV === 'production'
@@ -174,15 +174,15 @@ build({
 
 <summary>Rspack</summary>
 
-[example for Rspack (with Vanilla)](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/rspack-example)
+example: [playground/rspack-example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/rspack-example)
 
 ```javascript
 // rspack.config.js
-import ConditionalCode from 'code-sifter/rspack';
+import CodeSifter from 'code-sifter/rspack';
 
 export default {
   plugins: [
-    ConditionalCode({
+    CodeSifter({
       conditions: {
         IS_LINUX: false,
         IS_PRODUCTION: process.env.NODE_ENV === 'production'
@@ -198,15 +198,15 @@ export default {
 
 <summary>Farm</summary>
 
-[example for Farm with Lit](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/farm-example)
+example: [playground/farm-example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/farm-example)
 
 ```javascript
 // farm.config.js
-import ConditionalCode from 'code-sifter/farm';
+import CodeSifter from 'code-sifter/farm';
 
 export default {
   plugins: [
-    ConditionalCode({
+    CodeSifter({
       conditions: {
         IS_LINUX: false,
         IS_PRODUCTION: process.env.NODE_ENV === 'production'
@@ -222,15 +222,17 @@ export default {
 
 <summary>VueCli</summary>
 
+example: [playground/vue-example](https://github.com/ShueyYuen/CodeSifter/tree/main/playground/vue-example)
+
 ```javascript
 // vue.config.js
-const ConditionalCode = require('code-sifter/vueCli');
+const CodeSifter = require('code-sifter/vueCli');
 
 module.exports = {
   // ...
   configureWebpack: {
     plugins: [
-      ConditionalCode({
+      CodeSifter({
         conditions: {
           IS_LINUX: false,
           IS_PRODUCTION: process.env.NODE_ENV === 'production'

@@ -1,5 +1,5 @@
 import * as esbuild from 'esbuild'
-import ConditionalCode from 'code-sifter/esbuild';
+import CodeSifter from 'code-sifter/esbuild';
 
 await esbuild.build(
   /** @type {import('esbuild').BuildOptions} */
@@ -8,7 +8,7 @@ await esbuild.build(
     bundle: true,
     outfile: 'dist/index.js',
     plugins: [
-      ConditionalCode({
+      CodeSifter({
         conditions: {
           IS_LINUX: true,
           IS_PRODUCTION: false,

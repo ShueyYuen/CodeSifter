@@ -1,7 +1,7 @@
 import { type Options, resolveOptions } from './core/options.js';
 import { processCode } from './core/process.js';
 
-import type { LoaderDefinitionFunction } from 'webpack';
+import { type LoaderDefinitionFunction } from 'webpack';
 
 type LoaderOptions = Omit<Options, 'include' | 'exclude'>;
 

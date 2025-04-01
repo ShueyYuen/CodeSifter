@@ -13,7 +13,7 @@ import type { WebpackPluginInstance } from "webpack";
 
 const NAME = 'vue-cli-plugin-code-sifter';
 
-const vueCliPlugin = (rawOptions: Options = {}) => {
+const CodeSifter = (rawOptions: Options = {}) => {
   const options = resolveOptions(rawOptions);
   const filter = createFilter(options.include, [options.exclude, /\.html$/].flat());
 
@@ -40,5 +40,4 @@ const vueCliPlugin = (rawOptions: Options = {}) => {
   } as WebpackPluginInstance
 }
 
-export default vueCliPlugin;
-export { vueCliPlugin as 'module.exports' }
+export { CodeSifter as default, CodeSifter };

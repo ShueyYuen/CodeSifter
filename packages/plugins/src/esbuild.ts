@@ -12,13 +12,12 @@ import { ConditionalCode } from "./factory.js";
  * @example
  * ```ts
  * import { build } from 'esbuild';
- * import ConditionalCode from 'code-sifter/esbuild';
+ * import CodeSifter from 'code-sifter/esbuild';
  *
  * build({
- *   plugins: [ConditionalCode()],
+ *   plugins: [CodeSifter()],
  * });
  * ```
  */
-const esbuild = ConditionalCode.esbuild as  typeof ConditionalCode.esbuild;
-export default esbuild;
-export { esbuild as 'module.exports'}
+const CodeSifter = ConditionalCode.esbuild as  typeof ConditionalCode.esbuild;
+export { CodeSifter as default, CodeSifter };

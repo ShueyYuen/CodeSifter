@@ -12,12 +12,11 @@ import { ConditionalCode } from "./factory.js";
  * @example
  * ```ts
  * // vite.config.js
- * import ConditionalCode from 'code-sifter/vite';
+ * import CodeSifter from 'code-sifter/vite';
  *
  * export default defineConfig({
- *   plugins: [ConditionalCode()],
+ *   plugins: [CodeSifter()],
  * });
  */
-const vite = ConditionalCode.vite as  typeof ConditionalCode.vite;
-export default vite;
-export { vite as 'module.exports'}
+const CodeSifter = ConditionalCode.vite as  typeof ConditionalCode.vite;
+export { CodeSifter as default, CodeSifter };

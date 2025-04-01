@@ -1,5 +1,5 @@
 const path = require('path');
-const ConditionalCode = require('code-sifter/webpack');
+const { CodeSifter } = require('code-sifter/webpack');
 
 module.exports = {
   mode: 'development',
@@ -9,10 +9,12 @@ module.exports = {
     filename: 'bundle.js',
   },
   devtool: 'source-map',
-  plugins: [ConditionalCode({
-    conditions: {
-      IS_LINUX: process.env.OS === 'Linux',
-      IS_PRODUCTION: process.env.NODE_ENV === "production",
-    },
-  })],
+  plugins: [
+    CodeSifter({
+      conditions: {
+        IS_LINUX: process.env.OS === 'Linux',
+        IS_PRODUCTION: process.env.NODE_ENV === "production",
+      },
+    })
+  ],
 };

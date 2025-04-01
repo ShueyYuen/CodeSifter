@@ -1,6 +1,6 @@
 import { defineConfig } from "@rspack/cli";
 import { rspack } from "@rspack/core";
-import ConditionalCode from 'code-sifter/rspack';
+import CodeSifter from 'code-sifter/rspack';
 
 // Target browsers, see: https://github.com/browserslist/browserslist
 const targets = ["chrome >= 87", "edge >= 88", "firefox >= 78", "safari >= 14"];
@@ -54,7 +54,7 @@ export default defineConfig({
 	},
 	plugins: [
 		new rspack.HtmlRspackPlugin({ template: "./index.html" }),
-		ConditionalCode({
+		CodeSifter({
 			conditions: {
 				IS_LINUX: true,
 				IS_WINDOWS: false,

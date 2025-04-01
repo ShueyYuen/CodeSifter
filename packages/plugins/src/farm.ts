@@ -12,14 +12,13 @@ import { ConditionalCode } from "./factory.js";
  * @example
  * ```ts
  * // farm.config.js
- * import ConditionalCode from 'code-sifter/farm';
+ * import CodeSifter from 'code-sifter/farm';
  *
  *
  * export default {
- *  plugins: [ConditionalCode()],
+ *  plugins: [CodeSifter()],
  * };
  * ```
  */
-const farm = ConditionalCode.farm as  typeof ConditionalCode.farm;
-export default farm;
-export { farm as 'module.exports'}
+const CodeSifter = ConditionalCode.farm as  typeof ConditionalCode.farm;
+export { CodeSifter as default, CodeSifter };

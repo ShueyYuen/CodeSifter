@@ -12,13 +12,12 @@ import { ConditionalCode } from "./factory.js";
  * @example
  * ```ts
  * // rspack.config.js
- * import ConditionalCode from 'code-sifter/rspack';
+ * import CodeSifter from 'code-sifter/rspack';
  *
  * export default {
- *   plugins: [ConditionalCode()],
+ *   plugins: [CodeSifter()],
  * };
  * ```
  */
-const rspack = ConditionalCode.rspack as  typeof ConditionalCode.rspack;
-export default rspack;
-// export { rspack as 'module.exports'}
+const CodeSifter = ConditionalCode.rspack as  typeof ConditionalCode.rspack;
+export { CodeSifter as default, CodeSifter };
