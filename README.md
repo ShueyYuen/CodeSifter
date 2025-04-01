@@ -18,7 +18,7 @@ npm install code-sifter --save-dev
 - [x] Supports multiple file types (JavaScript, TypeScript, CSS, HTML, Vue, etc.)
 - [x] Works with multiple bundlers (webpack, rollup, vite, esbuild, rspack, farm)
 - [x] Source map support
-- [ ] ESLint integration
+- [x] ESLint integration
 
 ## Usage
 
@@ -253,9 +253,9 @@ CodeSifter includes an ESLint plugin to prevent false positives in conditional c
 // .eslintrc.js
 module.exports = {
   // ...
-  plugins: ['code-sifter'],
+  plugins: ['@code-sifter/eslint-plugin'],
   rules: {
-    'code-sifter/balanced-directives': 'error'
+    'code-sifter/balanced-conditional-directives': 'error'
   }
 };
 ```
@@ -301,6 +301,19 @@ console.log('High performance Linux machine');
 | `useMacroDefination` | `Boolean`                       | Whether to enable macro definition replacement                                    |
 | `sourcemap`          | `Boolean`                       | Whether to generate source maps                                                   |
 
+## VS Code Snippets
+
+To improve your development experience with CodeSifter, you can use the VS Code snippets that provide shortcuts for commonly used conditional code patterns. Simply create a [`.vscode/code-sifter.code-snippets`](https://github.com/ShueyYuen/CodeSifter/blob/main/.vscode/code-sifter.code-snippets) file in your project.
+
+After adding this file, you'll be able to use the following shortcuts:
+
+- Type `#if` to insert a conditional block with `#if`, `#ifdef`, or `#ifndef`
+- Type `#ie` to insert a conditional block with `#else` included
+- Type `__?` to create a ternary expression with macro definitions
+- Type `if__` to create an if statement with a macro condition
+- Type `ie__` to create an if-else statement with a macro condition
+
+You can customize these snippets by modifying the condition names or adding your own directives based on your project's needs.
 
 ## License
 

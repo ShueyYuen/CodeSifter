@@ -1,6 +1,6 @@
 {
   "name": "code-sifter",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A conditional compilation plugin for webpack and rollup",
   "type": "module",
   "repository": {
