@@ -36,15 +36,15 @@ export default [
 Then configure the rules you want to use under the `rules` key.
 
 ```js
-import code-sifter from "eslint-plugin-code-sifter";
+import codeSifter from "@code-sifter/eslint-plugin";
 
 export default [
     {
         plugins: {
-            code-sifter
+            codeSifter
         },
         rules: {
-            "code-sifter/rule-name": "warn"
+            "code-sifter/balanced-conditional-directives": "error"
         }
     }
 ];
@@ -63,7 +63,11 @@ TODO: Run eslint-doc-generator to generate the configs list (or delete this sect
 ## Rules
 
 <!-- begin auto-generated rules list -->
-TODO: Run eslint-doc-generator to generate the rules list.
+
+| Name                                                                             | Description                                                                             |
+| :------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
+| [balanced-conditional-directives](docs/rules/balanced-conditional-directives.md) | Ensure conditional directives (#if, #ifdef, #ifndef, #else, #endif) are properly paired |
+
 <!-- end auto-generated rules list -->
 
 

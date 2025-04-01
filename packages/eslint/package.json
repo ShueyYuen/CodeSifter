@@ -1,6 +1,6 @@
 {
   "name": "@code-sifter/eslint-plugin",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "work with code-sifter",
   "keywords": [
     "eslint",
@@ -14,9 +14,7 @@
     "lib"
   ],
   "scripts": {
-    "lint": "npm-run-all \"lint:*\"",
-    "lint:eslint-docs": "npm-run-all \"update:eslint-docs -- --check\"",
-    "lint:js": "eslint .",
+    "lint": "eslint .",
     "test": "mocha tests --recursive",
     "update:eslint-docs": "eslint-doc-generator"
   },

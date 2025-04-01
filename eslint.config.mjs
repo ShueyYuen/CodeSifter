@@ -91,4 +91,10 @@ export default tseslint.config(
       }
     }
   },
+  {
+    files: ["packages/eslint/**/*.js"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off"
+    },
+  }
 );
