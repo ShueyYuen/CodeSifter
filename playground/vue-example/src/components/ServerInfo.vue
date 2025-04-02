@@ -32,11 +32,12 @@ export default {
   data() {
     return {
       serverInfo: createServer({
-        delay: /* #if IS_LINUX */ 600 /* #else */ 100 /* #endif */,
+        delay: __IS_LINUX__ ? 600 : 100,
         /* #if IS_PRODUCTION */
         caching: true,
         compression: 'gzip',
         /* #endif */
+        bunlder: __WEBPACK__,
       })
     }
   },

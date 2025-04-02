@@ -6,7 +6,7 @@ export interface Options {
   include?: FilterPattern;
   exclude?: FilterPattern;
   conditions?: Conditions;
-  useMacroDefination?: boolean | FilterPattern;
+  useMacroDefination?: boolean;
 }
 
 export interface Replacer {

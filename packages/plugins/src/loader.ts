@@ -10,7 +10,7 @@ type LoaderOptions = Omit<Options, 'include' | 'exclude'>;
  * @param source - Source code
  * @returns Processed code
  */
-const codeSifter: LoaderDefinitionFunction<LoaderOptions> = function (source: string) {
+const codeSifter: LoaderDefinitionFunction<LoaderOptions> = function (source) {
   const options = resolveOptions(this.getOptions() || {});
   try {
     const result = processCode(source, {
@@ -18,10 +18,9 @@ const codeSifter: LoaderDefinitionFunction<LoaderOptions> = function (source: st
       sourcemap: this.sourceMap !== false,
     });
     if (result) {
-      this.callback(null, result.code, result.map);
-    } else {
-      this.callback(null, source);
+      return this.callback(null, result.code, result.map);
     }
+    return this.callback(null, source);
   } catch (error) {
     this.emitError(new Error(`Conditional compilation error in ${this.resourcePath}: ${error instanceof Error ? error.message : String(error)}`));
   }

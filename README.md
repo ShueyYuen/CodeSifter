@@ -36,7 +36,7 @@ For HTML files, use HTML comments: `<!-- #if CONDITION -->`, etc.
 
 Source code:
 ```javascript
-/* #if IS_LINUX & !IS_PRODUCTION */
+/* #if IS_LINUX && !IS_PRODUCTION */
 import { createServer } from './create-linux-server';
 /* #else */
 import { createServer } from './create-server';

@@ -182,7 +182,7 @@ function processCode(
 
   const result: TransformResult = { code: magicString.toString() };
   if (sourcemap) {
-    result.map = magicString.generateMap({ hires: true });
+    result.map = magicString.generateMap({ hires: true, includeContent: true });
   }
   return result;
 }

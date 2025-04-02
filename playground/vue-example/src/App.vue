@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      serverInfo: /* #if IS_LINUX */ 'Linux Server' /* #else */ 'Windows Server' /* #endif */,
+      serverInfo: __IS_LINUX__ ? 'Linux Server' : 'Windows Server',
     }
   },
   mounted() {

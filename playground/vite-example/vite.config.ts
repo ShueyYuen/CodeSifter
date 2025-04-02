@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react-swc'
 import CodeSifter from 'code-sifter/vite';
 
 export default defineConfig({
+  build: {
+    sourcemap: true,
+  },
   plugins: [
     react(),
     CodeSifter({

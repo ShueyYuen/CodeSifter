@@ -16,7 +16,6 @@ const NAME = 'vue-cli-plugin-code-sifter';
 const CodeSifter = (rawOptions: Options = {}) => {
   const options = resolveOptions(rawOptions);
   const filter = createFilter(options.include, [options.exclude, /\.html$/].flat());
-
   return {
     name: NAME,
     apply(compiler) {
@@ -30,12 +29,28 @@ const CodeSifter = (rawOptions: Options = {}) => {
           cb(null, data);
         })
       });
+
       compiler.options.module.rules.unshift({
         enforce: 'pre',
         test: (id) => filter(id),
         loader: 'code-sifter/loader',
-        options: rawOptions,
+        options: {
+          ...rawOptions,
+          useMacroDefination: false,
+        },
       });
+
+      if (options.macroDefinitions.length) {
+        const { conditions } = options;
+        const macroDefinitionsPlugin = new compiler.webpack.DefinePlugin(
+          Object.keys(conditions).reduce<Record<string, string>>((acc, key) => {
+            acc[`__${key}__`] = JSON.stringify(!!conditions[key]);
+            return acc;
+          }, {})
+        );
+
+        macroDefinitionsPlugin.apply(compiler);
+      }
     }
   } as WebpackPluginInstance
 }
