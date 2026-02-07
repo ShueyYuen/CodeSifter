@@ -12,7 +12,7 @@
   "devDependencies": {
     "code-sifter": "workspace:*",
     "cross-env": "^7.0.3",
-    "webpack": "5.98.0",
+    "webpack": "5.104.1",
     "webpack-cli": "6.0.1"
   }
 }
