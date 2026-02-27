@@ -14,6 +14,6 @@
     "@rollup/plugin-node-resolve": "16.0.1",
     "code-sifter": "workspace:*",
     "cross-env": "^7.0.3",
-    "rollup": "4.37.0"
+    "rollup": "4.59.0"
   }
 }
